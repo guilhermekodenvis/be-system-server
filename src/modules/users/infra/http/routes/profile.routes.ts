@@ -1,5 +1,5 @@
 import { Router } from 'express'
-// import { celebrate, Segments, Joi } from 'celebrate';
+import { celebrate, Segments, Joi } from 'celebrate'
 
 import ProfileController from '../controllers/ProfileController'
 
@@ -13,15 +13,17 @@ profileRouter.use(ensureAuthenticated)
 profileRouter.get('/', profileController.show)
 profileRouter.put(
 	'/',
-	// celebrate({
-	// 	[Segments.BODY]: {
-	// 		name: Joi.string().required(),
-	// 		email: Joi.string().email().required(),
-	// 		old_password: Joi.string(),
-	// 		password: Joi.string(),
-	// 		password_confirmation: Joi.string().valid(Joi.ref('password')),
-	// 	},
-	// }),
+	celebrate({
+		[Segments.BODY]: {
+			restaurant_name: Joi.string().required(),
+			user_name: Joi.string().required(),
+			email: Joi.string().email().required(),
+			old_password: Joi.string(),
+			password: Joi.string(),
+			password_confirmation: Joi.string().valid(Joi.ref('password')),
+			cnpj: Joi.string().required().length(14).regex(new RegExp('^[0-9]+$')),
+		},
+	}),
 	profileController.update,
 )
 

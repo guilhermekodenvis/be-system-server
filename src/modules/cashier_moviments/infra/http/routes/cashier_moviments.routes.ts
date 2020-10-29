@@ -1,17 +1,22 @@
-import OpenCashierService from '@modules/cashier_moviments/services/OpenCashierService'
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated'
+import { celebrate, Segments, Joi } from 'celebrate'
 import { Router } from 'express'
-import { container } from 'tsyringe'
+import CashierMovimentsController from '../controllers/CashierMovimentsController'
 
 const cashierMovimentsRoutes = Router()
 cashierMovimentsRoutes.use(ensureAuthenticated)
+const cashierMovimentsController = new CashierMovimentsController()
 
-cashierMovimentsRoutes.post('/open-cashier', (req, res) => {
-	const openCashierMoviment = container.resolve(OpenCashierService)
-	const { value, user_id } = req.body
-	const cashierMoviment = openCashierMoviment.run({ value, user_id })
-
-	return res.status(201).json(cashierMoviment)
-})
+cashierMovimentsRoutes.post(
+	'/open',
+	celebrate({
+		[Segments.BODY]: {
+			value: Joi.number().required(),
+			user_id: Joi.string().required(),
+			action: Joi.number().required(),
+		},
+	}),
+	cashierMovimentsController.create,
+)
 
 export default cashierMovimentsRoutes

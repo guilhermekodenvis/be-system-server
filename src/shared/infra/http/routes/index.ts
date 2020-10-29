@@ -6,6 +6,7 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 import passwordRouter from '@modules/users/infra/http/routes/password.routes'
 import productsRouter from '@modules/products/infra/http/routes/products.routes'
 import cashierMovimentsRoutes from '@modules/cashier_moviments/infra/http/routes/cashier_moviments.routes'
+import tableResquestsRoutes from '@modules/table_requests/infra/http/routes/tableRequests.routes'
 
 const routes = Router()
 
@@ -16,5 +17,6 @@ routes.use('/sessions', sessionsRouter)
 routes.use('/password', passwordRouter)
 routes.use('/products', productsRouter)
 routes.use('/cashier-moviments', cashierMovimentsRoutes)
+routes.use('/table-request', tableResquestsRoutes)
 
 export default routes

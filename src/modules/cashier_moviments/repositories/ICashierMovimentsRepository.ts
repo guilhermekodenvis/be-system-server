@@ -1,6 +1,6 @@
-import ICashierMovimentDTO from '../dtos/ICashierMovimentDTO'
+import IRegisterCashierMovimentDTO from '../dtos/IRegisterCashierMovimentDTO'
 import CashierMoviment from '../infra/typeorm/entities/CashierMoviment'
 
 export default interface ICashierMovimentsRepository {
-	create(data: ICashierMovimentDTO): Promise<CashierMoviment>
+	create(data: IRegisterCashierMovimentDTO): Promise<CashierMoviment>
 }

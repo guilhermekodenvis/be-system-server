@@ -35,3 +35,11 @@ class CashierMoviment {
 }
 
 export default CashierMoviment
+
+export const OPEN_CASHIER_MOVIMENT = 0
+export const PAY_WITH_DEBIT_MOVIMENT = 1
+export const PAY_WITH_CREDIT_MOVIMENT = 2
+export const PAY_WITH_MONEY_MOVIMENT = 3
+export const BLEED_MOVIMENT = 4
+export const PAYBACK_MOVIMENT = 5
+export const CLOSE_CASHIER_MOVIMENT = 6

@@ -11,8 +11,10 @@ import IUserTokensRepository from '@modules/users/repositories/IUserTokensReposi
 import IProductsRepository from '@modules/products/repositories/IProductsRepository'
 import ProductsRepository from '@modules/products/infra/typeorm/repositories/ProductsRepository'
 
-// import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository';
-// import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository';
+import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository'
+import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository'
+import TableRequestsRepository from '@modules/table_requests/infra/typeorm/repositories/TableRequestsRepository'
+import ITableRequestRepository from '@modules/table_requests/repositories/ITableRequestsRepository'
 
 container.registerSingleton<IUsersRepository>(
 	'UsersRepository',
@@ -29,7 +31,12 @@ container.registerSingleton<IProductsRepository>(
 	ProductsRepository,
 )
 
-// container.registerSingleton<INotificationsRepository>(
-//   'NotificationsRepository',
-//   NotificationsRepository,
-// );
+container.registerSingleton<INotificationsRepository>(
+	'NotificationsRepository',
+	NotificationsRepository,
+)
+
+container.registerSingleton<ITableRequestRepository>(
+	'TableRequestsRepository',
+	TableRequestsRepository,
+)

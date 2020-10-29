@@ -7,7 +7,7 @@ import {
 } from 'typeorm'
 // import uploadConfig from '@config/upload';
 
-// import { Exclude, Expose } from 'class-transformer';
+import { Exclude /* Expose */ } from 'class-transformer'
 
 @Entity('users')
 class User {
@@ -23,7 +23,7 @@ class User {
 	@Column()
 	email: string
 
-	// @Exclude()
+	@Exclude()
 	@Column()
 	password: string
 

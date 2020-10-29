@@ -1,7 +1,7 @@
 import { Router } from 'express'
 // import multer from 'multer';
 // import uploadConfig from '@config/upload';
-// import { celebrate, Segments, Joi } from 'celebrate';
+import { celebrate, Segments, Joi } from 'celebrate'
 
 import UsersController from '../controllers/UsersController'
 // import UserAvatarController from '../controllers/UserAvatarController';
@@ -16,13 +16,15 @@ const usersController = new UsersController()
 
 usersRouter.post(
 	'/',
-	// celebrate({
-	//   [Segments.BODY]: {
-	//     name: Joi.string().required(),
-	//     email: Joi.string().email().required(),
-	//     password: Joi.string().required(),
-	//   },
-	// }),
+	celebrate({
+		[Segments.BODY]: {
+			restaurant_name: Joi.string().required(),
+			user_name: Joi.string().required(),
+			email: Joi.string().email().required(),
+			password: Joi.string().required(),
+			cnpj: Joi.string().required().length(14).regex(new RegExp('^[0-9]+$')),
+		},
+	}),
 	usersController.create,
 )
 

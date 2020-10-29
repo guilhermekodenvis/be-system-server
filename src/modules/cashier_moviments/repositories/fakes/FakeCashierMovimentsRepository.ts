@@ -1,4 +1,4 @@
-import ICashierMovimentDTO from '@modules/cashier_moviments/dtos/ICashierMovimentDTO'
+import IRegisterCashierMovimentDTO from '@modules/cashier_moviments/dtos/IRegisterCashierMovimentDTO'
 import ICashierMovimentsRepository from '@modules/cashier_moviments/repositories/ICashierMovimentsRepository'
 import { v4 } from 'uuid'
 import CashierMoviment from '../../infra/typeorm/entities/CashierMoviment'
@@ -7,7 +7,9 @@ import CashierMoviment from '../../infra/typeorm/entities/CashierMoviment'
 export default class FakeCashierMovimentsRepository implements ICashierMovimentsRepository {
 	private cashier_moviments: CashierMoviment[] = []
 
-	public async create(data: ICashierMovimentDTO): Promise<CashierMoviment> {
+	public async create(
+		data: IRegisterCashierMovimentDTO,
+	): Promise<CashierMoviment> {
 		const cashierMoviment = new CashierMoviment()
 
 		Object.assign(cashierMoviment, {

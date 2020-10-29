@@ -1,11 +1,10 @@
 import { inject, injectable } from 'tsyringe'
-import ICashierMovimentDTO from '../dtos/ICashierMovimentDTO'
+import IRegisterCashierMovimentDTO from '../dtos/IRegisterCashierMovimentDTO'
 import CashierMoviment from '../infra/typeorm/entities/CashierMoviment'
-import { OPEN_CASHIER_MOVIMENT } from '../infra/typeorm/repositories/CashierMovimentsRepository'
 import ICashierMovimentsRepository from '../repositories/ICashierMovimentsRepository'
 
 @injectable()
-export default class OpenCashierService {
+export default class RegisterCashierMovimentService {
 	constructor(
 		@inject('CashierMovimentsRepository')
 		private cashierMovimentsRepository: ICashierMovimentsRepository,
@@ -14,11 +13,12 @@ export default class OpenCashierService {
 	public async run({
 		value,
 		user_id,
-	}: ICashierMovimentDTO): Promise<CashierMoviment> {
+		action,
+	}: IRegisterCashierMovimentDTO): Promise<CashierMoviment> {
 		return this.cashierMovimentsRepository.create({
 			value,
 			user_id,
-			action: OPEN_CASHIER_MOVIMENT,
+			action,
 		})
 	}
 }
