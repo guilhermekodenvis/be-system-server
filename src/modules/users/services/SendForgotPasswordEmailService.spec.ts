@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import AppError from '@shared/errors/AppError'
 
 import FakeMailProvider from '@shared/container/providers/MailProvider/fakes/FakeMailProvider'

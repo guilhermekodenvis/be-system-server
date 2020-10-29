@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken'
+import { Secret, sign } from 'jsonwebtoken'
 import authConfig from '@config/auth'
 import { injectable, inject } from 'tsyringe'
 
@@ -46,7 +46,9 @@ class AuthenticateUserService {
 
 		const { secret, expiresIn } = authConfig.jwt
 
-		const token = sign({}, secret, {
+		console.log('app secret', secret)
+
+		const token = sign({}, secret as Secret, {
 			subject: user.id,
 			expiresIn,
 		})

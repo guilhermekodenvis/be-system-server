@@ -39,6 +39,8 @@ class SendForgotPasswordEmailService {
 			'forgot_password.hbs',
 		)
 
+		console.log(process.env.APP_WEB_URL)
+
 		await this.mailProvider.sendMail({
 			to: {
 				name: user.user_name,
@@ -49,9 +51,7 @@ class SendForgotPasswordEmailService {
 				file: forgotPasswordTemplate,
 				variables: {
 					name: user.user_name,
-					link: `${
-						process.env.APP_WEB_URL || 'http://localhost:3000'
-					}/esqueci-a-senha/${token}`,
+					link: `${process.env.APP_WEB_URL}/esqueci-a-senha/${token}`,
 				},
 			},
 		})
