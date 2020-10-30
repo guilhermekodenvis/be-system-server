@@ -1,5 +1,5 @@
-import TableRequests from '../infra/typeorm/schemas/TableRequests'
+import TableRequest from '../infra/typeorm/schemas/TableRequests'
 
 export default interface IDataInsertProductsInTable {
-	tableRequest: TableRequests
+	tableRequest: TableRequest
 }

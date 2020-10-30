@@ -1,14 +1,14 @@
 import AppError from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
 import IRequestCreateRegisterInTableDTO from '../dtos/IRequestCreateRegisterInTableDTO'
-import TableRequests from '../infra/typeorm/schemas/TableRequests'
-import ITableRequestRepository from '../repositories/ITableRequestsRepository'
+import TableRequest from '../infra/typeorm/schemas/TableRequests'
+import ITableRequestsRepository from '../repositories/ITableRequestsRepository'
 
 @injectable()
 export default class InsertProductsIntoTable {
 	constructor(
 		@inject('TableRequestsRepository')
-		private tableRequestsRepository: ITableRequestRepository,
+		private tableRequestsRepository: ITableRequestsRepository,
 	) {}
 
 	public async run({
@@ -16,8 +16,8 @@ export default class InsertProductsIntoTable {
 		table_number,
 		products,
 		user_id,
-	}: IRequestCreateRegisterInTableDTO): Promise<TableRequests> {
-		let tableRequest: TableRequests | undefined
+	}: IRequestCreateRegisterInTableDTO): Promise<TableRequest> {
+		let tableRequest: TableRequest | undefined
 
 		if (table_id) {
 			tableRequest = await this.tableRequestsRepository.getTableRequest({

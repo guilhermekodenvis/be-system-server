@@ -9,7 +9,7 @@ import {
 import ProductsInTable from './ProductsInTable'
 
 @Entity('table_requests')
-class TableRequests {
+class TableRequest {
 	@ObjectIdColumn()
 	id: ObjectID
 
@@ -30,4 +30,4 @@ class TableRequests {
 	updated_at: Date
 }
 
-export default TableRequests
+export default TableRequest

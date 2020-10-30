@@ -12,6 +12,16 @@ tableResquestsRoutes.post(
 	'/',
 	celebrate({
 		[Segments.BODY]: {
+			table_number: Joi.number().required(),
+		},
+	}),
+	tableRequestsController.create,
+)
+
+tableResquestsRoutes.post(
+	'/create-table',
+	celebrate({
+		[Segments.BODY]: {
 			products: Joi.array().items(
 				Joi.object({
 					product_id: Joi.string().required(),

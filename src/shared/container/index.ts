@@ -14,7 +14,7 @@ import ProductsRepository from '@modules/products/infra/typeorm/repositories/Pro
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository'
 import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository'
 import TableRequestsRepository from '@modules/table_requests/infra/typeorm/repositories/TableRequestsRepository'
-import ITableRequestRepository from '@modules/table_requests/repositories/ITableRequestsRepository'
+import ITableRequestsRepository from '@modules/table_requests/repositories/ITableRequestsRepository'
 
 container.registerSingleton<IUsersRepository>(
 	'UsersRepository',
@@ -36,7 +36,7 @@ container.registerSingleton<INotificationsRepository>(
 	NotificationsRepository,
 )
 
-container.registerSingleton<ITableRequestRepository>(
+container.registerSingleton<ITableRequestsRepository>(
 	'TableRequestsRepository',
 	TableRequestsRepository,
 )
