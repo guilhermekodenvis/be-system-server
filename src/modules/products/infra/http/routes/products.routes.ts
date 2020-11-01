@@ -14,8 +14,10 @@ productsRouter.post(
 	celebrate({
 		[Segments.BODY]: {
 			name: Joi.string().required(),
-			price: Joi.string().required(),
-			user_id: Joi.string().required(),
+			price: Joi.number().required(),
+			category: Joi.string().required(),
+			description: Joi.string().default(''),
+			ingredients: Joi.string().default(''),
 		},
 	}),
 	productsController.create,
@@ -25,8 +27,10 @@ productsRouter.put(
 	celebrate({
 		[Segments.BODY]: {
 			name: Joi.string().required(),
-			price: Joi.string().required(),
-			user_id: Joi.string().required(),
+			price: Joi.number().required(),
+			category: Joi.string().required(),
+			description: Joi.string().default(''),
+			ingredients: Joi.string().default(''),
 		},
 	}),
 	productsController.update,

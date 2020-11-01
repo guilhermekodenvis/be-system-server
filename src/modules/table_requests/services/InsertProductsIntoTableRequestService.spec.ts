@@ -1,14 +1,14 @@
 import 'reflect-metadata'
 import AppError from '@shared/errors/AppError'
 import { ObjectID } from 'typeorm'
-import InsertProductsIntoTable from './InsertProductsIntoTableService'
+import InsertProductsIntoTableRequestService from './InsertProductsIntoTableRequestService'
 import FakeTableRequestsRepository from '../repositories/fakes/FakeTableRequestsRepository'
 
-let insertProductsIntoTable: InsertProductsIntoTable
+let insertProductsIntoTable: InsertProductsIntoTableRequestService
 
 describe('CreateProduct', () => {
 	beforeEach(() => {
-		insertProductsIntoTable = new InsertProductsIntoTable(
+		insertProductsIntoTable = new InsertProductsIntoTableRequestService(
 			new FakeTableRequestsRepository(),
 		)
 	})

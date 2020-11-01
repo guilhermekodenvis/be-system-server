@@ -5,6 +5,10 @@ import ITableRequestsRepository from '@modules/table_requests/repositories/ITabl
 import { getMongoRepository, MongoRepository } from 'typeorm'
 import TableRequest from '../schemas/TableRequests'
 
+interface IDataFindTableRequests {
+	user_id: string
+}
+
 // eslint-disable-next-line prettier/prettier
 export default class TableRequestsRepository implements ITableRequestsRepository {
 	private ormRepository: MongoRepository<TableRequest>
@@ -35,5 +39,15 @@ export default class TableRequestsRepository implements ITableRequestsRepository
 		})
 
 		return this.ormRepository.save(tableRequest)
+	}
+
+	public async findByUserId({
+		user_id,
+	}: IDataFindTableRequests): Promise<TableRequest[]> {
+		return this.ormRepository.find({
+			where: {
+				user_id,
+			},
+		})
 	}
 }

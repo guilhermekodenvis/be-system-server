@@ -2,9 +2,11 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 import { Router } from 'express'
 import { celebrate, Joi, Segments } from 'celebrate'
 import TableRequestsController from '../controllers/TableRequestsController'
+import ProducstInTableRequestController from '../controllers/ProducstInTableRequestController'
 
 const tableResquestsRoutes = Router()
 const tableRequestsController = new TableRequestsController()
+const producstInTableRequestController = new ProducstInTableRequestController()
 
 tableResquestsRoutes.use(ensureAuthenticated)
 
@@ -19,7 +21,7 @@ tableResquestsRoutes.post(
 )
 
 tableResquestsRoutes.post(
-	'/create-table',
+	'/add-products',
 	celebrate({
 		[Segments.BODY]: {
 			products: Joi.array().items(
@@ -31,12 +33,14 @@ tableResquestsRoutes.post(
 					observation: Joi.string(),
 				}),
 			),
-			table_number: Joi.number(),
-			user_id: Joi.string().required(),
-			table_id: Joi.string(),
+			table_id: Joi.string().required(),
 		},
 	}),
-	tableRequestsController.create,
+	producstInTableRequestController.create,
 )
+
+tableResquestsRoutes.get('/', tableRequestsController.index)
+
+tableResquestsRoutes.get('/:id', producstInTableRequestController.show)
 
 export default tableResquestsRoutes
