@@ -1,6 +1,7 @@
+import IGetMovimentsDTO from '@modules/cashier_moviments/dtos/IGetMovimentsDTO'
 import ICashierMovimentDTO from '@modules/cashier_moviments/dtos/IRegisterCashierMovimentDTO'
 import ICashierMovimentsRepository from '@modules/cashier_moviments/repositories/ICashierMovimentsRepository'
-import { getRepository, Repository } from 'typeorm'
+import { getRepository, Raw, Repository } from 'typeorm'
 import CashierMoviment from '../entities/CashierMoviment'
 
 // eslint-disable-next-line prettier/prettier
@@ -26,5 +27,26 @@ export default class CashierMovimentsRepository implements ICashierMovimentsRepo
 		await this.ormRepository.save(cashierMoviment)
 
 		return cashierMoviment
+	}
+
+	public async getAllMovimentsOfTheDay({
+		date,
+		user_id,
+	}: IGetMovimentsDTO): Promise<CashierMoviment[]> {
+		const { day, month, year } = date
+		const parsedDay = String(day).padStart(2, '0')
+		const parsedMonth = String(month + 1).padStart(2, '0')
+
+		const cashierMoviments = await this.ormRepository.find({
+			where: {
+				user_id,
+				created_at: Raw(
+					dateFieldName =>
+						`to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
+				),
+			},
+		})
+
+		return cashierMoviments
 	}
 }

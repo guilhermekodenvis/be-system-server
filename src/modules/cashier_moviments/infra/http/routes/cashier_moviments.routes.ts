@@ -18,6 +18,16 @@ cashierMovimentsRoutes.post(
 )
 
 cashierMovimentsRoutes.post(
+	'/close',
+	celebrate({
+		[Segments.BODY]: {
+			observation: Joi.string().required(),
+		},
+	}),
+	cashierMovimentsController.close,
+)
+
+cashierMovimentsRoutes.post(
 	'/finish-payment',
 	celebrate({
 		[Segments.BODY]: {
@@ -32,5 +42,7 @@ cashierMovimentsRoutes.post(
 	}),
 	cashierMovimentsController.createMany,
 )
+
+cashierMovimentsRoutes.get('/', cashierMovimentsController.index)
 
 export default cashierMovimentsRoutes
