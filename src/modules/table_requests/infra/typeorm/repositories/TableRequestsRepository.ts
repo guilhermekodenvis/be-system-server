@@ -1,8 +1,9 @@
 import IDataCreateTableRequestDTO from '@modules/table_requests/dtos/IDataCreateTableRequestDTO'
+import IDataDestroyTableRequestDTO from '@modules/table_requests/dtos/IDataDestroyTableRequestDTO'
 import IDataGetTableDTO from '@modules/table_requests/dtos/IDataGetTableDTO'
 import IDataInsertProductsInTable from '@modules/table_requests/dtos/IDataInsertProductsInTable'
 import ITableRequestsRepository from '@modules/table_requests/repositories/ITableRequestsRepository'
-import { getMongoRepository, MongoRepository } from 'typeorm'
+import { DeleteResult, getMongoRepository, MongoRepository } from 'typeorm'
 import TableRequest from '../schemas/TableRequests'
 
 interface IDataFindTableRequests {
@@ -49,5 +50,11 @@ export default class TableRequestsRepository implements ITableRequestsRepository
 				user_id,
 			},
 		})
+	}
+
+	public async destroy({
+		tableRequest,
+	}: IDataDestroyTableRequestDTO): Promise<DeleteResult> {
+		return this.ormRepository.delete(tableRequest)
 	}
 }

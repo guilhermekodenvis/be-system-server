@@ -13,8 +13,12 @@ import ProductsRepository from '@modules/products/infra/typeorm/repositories/Pro
 
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository'
 import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository'
-import TableRequestsRepository from '@modules/table_requests/infra/typeorm/repositories/TableRequestsRepository'
+
 import ITableRequestsRepository from '@modules/table_requests/repositories/ITableRequestsRepository'
+import TableRequestsRepository from '@modules/table_requests/infra/typeorm/repositories/TableRequestsRepository'
+
+import ICashierMovimentsRepository from '@modules/cashier_moviments/repositories/ICashierMovimentsRepository'
+import CashierMovimentsRepository from '@modules/cashier_moviments/infra/typeorm/repositories/CashierMovimentsRepository'
 
 container.registerSingleton<IUsersRepository>(
 	'UsersRepository',
@@ -34,6 +38,11 @@ container.registerSingleton<IProductsRepository>(
 container.registerSingleton<INotificationsRepository>(
 	'NotificationsRepository',
 	NotificationsRepository,
+)
+
+container.registerSingleton<ICashierMovimentsRepository>(
+	'CashierMovimentsRepository',
+	CashierMovimentsRepository,
 )
 
 container.registerSingleton<ITableRequestsRepository>(

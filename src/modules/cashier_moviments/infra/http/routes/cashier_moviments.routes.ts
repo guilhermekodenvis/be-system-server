@@ -12,11 +12,25 @@ cashierMovimentsRoutes.post(
 	celebrate({
 		[Segments.BODY]: {
 			value: Joi.number().required(),
-			user_id: Joi.string().required(),
-			action: Joi.number().required(),
 		},
 	}),
 	cashierMovimentsController.create,
+)
+
+cashierMovimentsRoutes.post(
+	'/finish-payment',
+	celebrate({
+		[Segments.BODY]: {
+			table_id: Joi.string().required(),
+			payments: Joi.array().items(
+				Joi.object({
+					value: Joi.number().required(),
+					type: Joi.number().required(),
+				}),
+			),
+		},
+	}),
+	cashierMovimentsController.createMany,
 )
 
 export default cashierMovimentsRoutes
