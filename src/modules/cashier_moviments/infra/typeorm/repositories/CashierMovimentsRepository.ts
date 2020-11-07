@@ -1,8 +1,12 @@
+import IGetCashierSituation from '@modules/cashier_moviments/dtos/IGetCashierSituation'
 import IGetMovimentsDTO from '@modules/cashier_moviments/dtos/IGetMovimentsDTO'
 import ICashierMovimentDTO from '@modules/cashier_moviments/dtos/IRegisterCashierMovimentDTO'
 import ICashierMovimentsRepository from '@modules/cashier_moviments/repositories/ICashierMovimentsRepository'
 import { getRepository, Raw, Repository } from 'typeorm'
-import CashierMoviment from '../entities/CashierMoviment'
+import CashierMoviment, {
+	CLOSE_CASHIER_MOVIMENT,
+	OPEN_CASHIER_MOVIMENT,
+} from '../entities/CashierMoviment'
 
 // eslint-disable-next-line prettier/prettier
 export default class CashierMovimentsRepository implements ICashierMovimentsRepository {
@@ -48,5 +52,35 @@ export default class CashierMovimentsRepository implements ICashierMovimentsRepo
 		})
 
 		return cashierMoviments
+	}
+
+	public async getLastApperture({
+		user_id,
+	}: IGetCashierSituation): Promise<CashierMoviment | undefined> {
+		const lastApperture = await this.ormRepository.findOne({
+			where: {
+				action: OPEN_CASHIER_MOVIMENT,
+			},
+			order: {
+				created_at: 'DESC',
+			},
+		})
+
+		return lastApperture
+	}
+
+	public async getLastClose({
+		user_id,
+	}: IGetCashierSituation): Promise<CashierMoviment | undefined> {
+		const lastClose = await this.ormRepository.findOne({
+			where: {
+				action: CLOSE_CASHIER_MOVIMENT,
+			},
+			order: {
+				created_at: 'DESC',
+			},
+		})
+
+		return lastClose
 	}
 }

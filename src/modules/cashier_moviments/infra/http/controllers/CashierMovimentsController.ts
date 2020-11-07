@@ -4,14 +4,15 @@ import CloseCashierMovimentService from '@modules/cashier_moviments/services/Clo
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 import GetMovimentsToCloseCashierService from '@modules/cashier_moviments/services/GetMovimentsToCloseCashierService'
+import GetCashierSituationService from '@modules/cashier_moviments/services/GetCashierSituationService'
 
 export default class CashierMovimentsController {
-	public async create(request: Request, response: Response): Promise<Response> {
+	public async open(request: Request, response: Response): Promise<Response> {
 		const openCashierMoviment = container.resolve(
 			RegisterCashierMovimentService,
 		)
 		const { value } = request.body
-		const action = 1
+		const action = 0
 		const { id: user_id } = request.user
 		const cashierMoviment = openCashierMoviment.run({ value, user_id, action })
 
@@ -62,5 +63,16 @@ export default class CashierMovimentsController {
 		})
 
 		return response.json(cashierMoviments)
+	}
+
+	public async show(request: Request, response: Response): Promise<Response> {
+		const getCashierSituation = container.resolve(GetCashierSituationService)
+
+		const { id } = request.user
+		const cashierSituation = await getCashierSituation.run({
+			user_id: id,
+		})
+
+		return response.json(cashierSituation)
 	}
 }

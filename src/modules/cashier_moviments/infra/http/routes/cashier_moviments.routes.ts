@@ -14,7 +14,7 @@ cashierMovimentsRoutes.post(
 			value: Joi.number().required(),
 		},
 	}),
-	cashierMovimentsController.create,
+	cashierMovimentsController.open,
 )
 
 cashierMovimentsRoutes.post(
@@ -44,5 +44,7 @@ cashierMovimentsRoutes.post(
 )
 
 cashierMovimentsRoutes.get('/', cashierMovimentsController.index)
+
+cashierMovimentsRoutes.get('/situation', cashierMovimentsController.show)
 
 export default cashierMovimentsRoutes
