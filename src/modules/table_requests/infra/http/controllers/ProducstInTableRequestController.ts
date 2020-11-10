@@ -1,5 +1,6 @@
 import FindTableRequestService from '@modules/table_requests/services/FindTableRequestService'
 import InsertProductsIntoTableRequestService from '@modules/table_requests/services/InsertProductsIntoTableRequestService'
+import GenerateInvoiceToKitchenService from '@modules/table_requests/services/GenerateInvoiceToKitchenService'
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 
@@ -11,13 +12,22 @@ export default class ProducstInTableRequestController {
 		const insertProductsIntoTableRequest = container.resolve(
 			InsertProductsIntoTableRequestService,
 		)
+
+		const generateInvoiceToKitchen = container.resolve(
+			GenerateInvoiceToKitchenService,
+		)
+
 		const tableRequest = await insertProductsIntoTableRequest.run({
 			table_id,
 			products,
 			user_id: id,
 		})
 
-		return response.status(201).json(tableRequest)
+		const fileName = await generateInvoiceToKitchen.run({ tableRequest })
+
+		return response
+			.status(201)
+			.json({ download: `${process.env.APP_API_URL}/files/${fileName}` })
 	}
 
 	public async show(request: Request, response: Response): Promise<Response> {
