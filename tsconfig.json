@@ -1,7 +1,7 @@
 {
-	  "compilerOptions": {
-		"target": "es5",
-    "module": "commonjs",
+	"compilerOptions": {
+		"target": "es6",
+    "module": "CommonJS",
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
@@ -18,5 +18,11 @@
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true
 	},
-	"exclude": ["./prettier.config.js", "./jest.config.js", "./babel.config.js", "./coverage"]
+	"exclude": [
+		"./prettier.config.js",
+		"./jest.config.js",
+		"./babel.config.js",
+		"./coverage",
+		"./dist/**/*"
+	]
 }
