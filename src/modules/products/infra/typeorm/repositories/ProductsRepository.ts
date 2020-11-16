@@ -31,7 +31,7 @@ class ProductsRepository implements IProductsRepository {
 	}
 
 	public async delete(product: Product): Promise<void> {
-		this.ormRepository.delete(product)
+		this.ormRepository.delete({ id: product.id })
 	}
 
 	public async getProductsByUserId(

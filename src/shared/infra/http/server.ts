@@ -33,6 +33,7 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
 		})
 	}
 
+	console.error(err)
 	// TODO: COLOCAR AQUI UMA MANEIRA DE GUARDAR O ERRO NO BANCO DE DADOS
 
 	return response.status(500).json({
@@ -41,4 +42,4 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
 	})
 })
 
-app.listen(PORT)
+app.listen(PORT, () => console.log(`🐘 - Server is running on port ${PORT}...`))
