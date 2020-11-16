@@ -8,13 +8,20 @@ import GetCashierSituationService from '@modules/cashier_moviments/services/GetC
 
 export default class CashierMovimentsController {
 	public async open(request: Request, response: Response): Promise<Response> {
+		const { value, password } = request.body
+		const action = 0
+		const { id: user_id } = request.user
+
 		const openCashierMoviment = container.resolve(
 			RegisterCashierMovimentService,
 		)
-		const { value } = request.body
-		const action = 0
-		const { id: user_id } = request.user
-		const cashierMoviment = openCashierMoviment.run({ value, user_id, action })
+
+		const cashierMoviment = await openCashierMoviment.run({
+			value,
+			user_id,
+			action,
+			password,
+		})
 
 		return response.status(201).json(cashierMoviment)
 	}

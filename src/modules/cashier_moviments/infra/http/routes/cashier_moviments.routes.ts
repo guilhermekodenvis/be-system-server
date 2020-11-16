@@ -12,6 +12,7 @@ cashierMovimentsRoutes.post(
 	celebrate({
 		[Segments.BODY]: {
 			value: Joi.number().required(),
+			password: Joi.string().required(),
 		},
 	}),
 	cashierMovimentsController.open,

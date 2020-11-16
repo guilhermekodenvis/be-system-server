@@ -1,10 +1,10 @@
 import 'reflect-metadata'
 import 'dotenv/config'
+import 'express-async-errors'
 
 import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import { errors } from 'celebrate'
-import 'express-async-errors'
 
 import uploadConfig from '@config/upload'
 import AppError from '@shared/errors/AppError'
@@ -33,7 +33,6 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
 		})
 	}
 
-	console.error(err)
 	// TODO: COLOCAR AQUI UMA MANEIRA DE GUARDAR O ERRO NO BANCO DE DADOS
 
 	return response.status(500).json({
@@ -42,4 +41,4 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
 	})
 })
 
-app.listen(PORT, () => console.log(`🐘 - Server is running on port ${PORT}...`))
+app.listen(PORT)
