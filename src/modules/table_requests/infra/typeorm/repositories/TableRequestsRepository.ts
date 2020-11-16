@@ -49,6 +49,7 @@ export default class TableRequestsRepository implements ITableRequestsRepository
 			where: {
 				user_id,
 			},
+			order: { number: 'ASC' },
 		})
 	}
 

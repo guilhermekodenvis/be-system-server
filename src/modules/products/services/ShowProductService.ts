@@ -33,8 +33,6 @@ export default class ShowProductService {
 			throw new AppError('Você não tem acesso a esse produto.')
 		}
 
-		await this.productsRepository.delete(product)
-
 		return product
 	}
 }
