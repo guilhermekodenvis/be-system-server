@@ -22,6 +22,8 @@ productsRouter.post(
 	}),
 	productsController.create,
 )
+productsRouter.get('/categories', productsController.categories)
+
 productsRouter.put(
 	'/:product_id',
 	celebrate({
@@ -36,6 +38,7 @@ productsRouter.put(
 	productsController.update,
 )
 productsRouter.delete('/:product_id', productsController.delete)
+
 productsRouter.get('/:product_id', productsController.show)
 
 export default productsRouter

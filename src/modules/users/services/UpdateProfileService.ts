@@ -21,9 +21,6 @@ class UpdateProfileService {
 	constructor(
 		@inject('UsersRepository')
 		private usersRepository: IUsersRepository,
-
-		@inject('HashProvider')
-		private hashProvider: IHashProvider,
 	) {}
 
 	public async run({
@@ -32,8 +29,6 @@ class UpdateProfileService {
 		user_name,
 		cnpj,
 		email,
-		old_password,
-		password,
 	}: IRequest): Promise<User> {
 		const user = await this.usersRepository.findById(user_id)
 
@@ -51,23 +46,6 @@ class UpdateProfileService {
 		user.user_name = user_name
 		user.email = email
 		user.cnpj = cnpj
-
-		if (password && !old_password) {
-			throw new AppError('Informe a senha antiga para poder trocar de senha.')
-		}
-
-		if (password && old_password) {
-			const checkOldPassword = await this.hashProvider.compareHash(
-				old_password,
-				user.password,
-			)
-
-			if (!checkOldPassword) {
-				throw new AppError('A senha antiga está errada.')
-			}
-
-			user.password = await this.hashProvider.generateHash(password)
-		}
 
 		return this.usersRepository.save(user)
 	}

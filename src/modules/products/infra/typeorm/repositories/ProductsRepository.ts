@@ -43,6 +43,15 @@ class ProductsRepository implements IProductsRepository {
 
 		return products
 	}
+
+	public async getCategoriesByUserId(user_id: string): Promise<Array<Product>> {
+		const categories = await this.ormRepository.find({
+			where: { user_id },
+			select: ['category'],
+		})
+
+		return categories
+	}
 }
 
 export default ProductsRepository

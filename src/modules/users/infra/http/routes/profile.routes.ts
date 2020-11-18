@@ -18,13 +18,21 @@ profileRouter.put(
 			restaurant_name: Joi.string().required(),
 			user_name: Joi.string().required(),
 			email: Joi.string().email().required(),
-			old_password: Joi.string(),
-			password: Joi.string(),
-			password_confirmation: Joi.string().valid(Joi.ref('password')),
 			cnpj: Joi.string().required().length(14).regex(new RegExp('^[0-9]+$')),
 		},
 	}),
 	profileController.update,
+)
+
+profileRouter.put(
+	'/password',
+	celebrate({
+		[Segments.BODY]: {
+			old_password: Joi.string().required(),
+			password: Joi.string().required(),
+		},
+	}),
+	profileController.updatePassword,
 )
 
 export default profileRouter

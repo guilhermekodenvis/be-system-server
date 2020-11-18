@@ -1,5 +1,6 @@
 import CreateProductService from '@modules/products/services/CreateProductService'
 import DeleteProductService from '@modules/products/services/DeleteProductService'
+import GetCategoriesService from '@modules/products/services/GetCategoriesService'
 import ListProductsService from '@modules/products/services/ListProductsService'
 import ShowProductService from '@modules/products/services/ShowProductService'
 import UpdateProductService from '@modules/products/services/UpdateProductService'
@@ -80,6 +81,19 @@ class ProductsController {
 		})
 
 		return response.json(product)
+	}
+
+	public async categories(
+		request: Request,
+		response: Response,
+	): Promise<Response> {
+		const { id: user_id } = request.user
+		const showProductService = container.resolve(GetCategoriesService)
+		const products = await showProductService.run({
+			user_id,
+		})
+
+		return response.json(products)
 	}
 }
 
