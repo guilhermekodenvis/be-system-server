@@ -63,12 +63,11 @@ export default class TableRequestsRepository implements ITableRequestsRepository
 	public async findByTableNumber({
 		number,
 		user_id,
-	}: IDataRequestTableAviability): Promise<boolean> {
-		const aviability = await this.ormRepository.findOne({
+	}: IDataRequestTableAviability): Promise<TableRequest | undefined> {
+		const table = await this.ormRepository.findOne({
 			where: { number, user_id },
 		})
 
-		console.log(aviability)
-		return !aviability
+		return table
 	}
 }

@@ -24,6 +24,9 @@ export default class CheckTableAviabilityService {
 			user_id,
 		})
 
-		return tableRequest
+		if (tableRequest) {
+			return true
+		}
+		return false
 	}
 }

@@ -16,5 +16,7 @@ export default interface ITableRequestsRepository {
 	createTableRequest(data: IDataCreateTableRequestDTO): Promise<TableRequest>
 	findByUserId(data: IDataFindTableRequests): Promise<TableRequest[]>
 	destroy(data: IDataDestroyTableRequestDTO): Promise<DeleteResult>
-	findByTableNumber(data: IDataRequestTableAviability): Promise<boolean>
+	findByTableNumber(
+		data: IDataRequestTableAviability,
+	): Promise<TableRequest | undefined>
 }
