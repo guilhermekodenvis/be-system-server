@@ -43,4 +43,9 @@ tableResquestsRoutes.get('/', tableRequestsController.index)
 
 tableResquestsRoutes.get('/:id', producstInTableRequestController.show)
 
+tableResquestsRoutes.get(
+	'/verify-table/:number',
+	tableRequestsController.checkAviability,
+)
+
 export default tableResquestsRoutes

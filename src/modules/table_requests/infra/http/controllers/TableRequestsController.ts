@@ -1,7 +1,7 @@
 import CreateTableRequestService from '@modules/table_requests/services/CreateTableRequestService'
-import FindTableRequestsService from '@modules/table_requests/services/FindTableRequestsService'
-// import InsertProductsIntoTable from '@modules/table_requests/services/InsertProductsIntoTableService'
 import { Request, Response } from 'express'
+import FindTableRequestsService from '@modules/table_requests/services/FindTableRequestsService'
+import CheckTableAviabilityService from '@modules/table_requests/services/CheckTableAviabilityService'
 import { container } from 'tsyringe'
 
 export default class TableRequestsController {
@@ -23,5 +23,19 @@ export default class TableRequestsController {
 		const findTableRequests = container.resolve(FindTableRequestsService)
 		const tableRequests = await findTableRequests.run({ user_id: id })
 		return response.json(tableRequests)
+	}
+
+	public async checkAviability(
+		request: Request,
+		response: Response,
+	): Promise<Response> {
+		const { number } = request.params
+		const { id } = request.user
+		const checkTableAviability = container.resolve(CheckTableAviabilityService)
+		const isAvailable = await checkTableAviability.run({
+			number: Number(number),
+			user_id: id,
+		})
+		return response.json({ is_available: isAvailable })
 	}
 }

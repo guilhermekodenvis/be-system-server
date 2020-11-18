@@ -2,6 +2,7 @@ import IDataCreateTableRequestDTO from '@modules/table_requests/dtos/IDataCreate
 import IDataDestroyTableRequestDTO from '@modules/table_requests/dtos/IDataDestroyTableRequestDTO'
 import IDataGetTableDTO from '@modules/table_requests/dtos/IDataGetTableDTO'
 import IDataInsertProductsInTable from '@modules/table_requests/dtos/IDataInsertProductsInTable'
+import IDataRequestTableAviability from '@modules/table_requests/dtos/IDataRequestTableAviability'
 import ITableRequestsRepository from '@modules/table_requests/repositories/ITableRequestsRepository'
 import { DeleteResult, getMongoRepository, MongoRepository } from 'typeorm'
 import TableRequest from '../schemas/TableRequests'
@@ -57,5 +58,17 @@ export default class TableRequestsRepository implements ITableRequestsRepository
 		tableRequest,
 	}: IDataDestroyTableRequestDTO): Promise<DeleteResult> {
 		return this.ormRepository.delete(tableRequest)
+	}
+
+	public async findByTableNumber({
+		number,
+		user_id,
+	}: IDataRequestTableAviability): Promise<boolean> {
+		const aviability = await this.ormRepository.findOne({
+			where: { number, user_id },
+		})
+
+		console.log(aviability)
+		return !aviability
 	}
 }
