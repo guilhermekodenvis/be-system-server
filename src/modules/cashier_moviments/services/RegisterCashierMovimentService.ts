@@ -38,7 +38,6 @@ export default class RegisterCashierMovimentService {
 			throw new AppError('Senha incorreta, tente novamente.')
 		}
 
-		console.log('entrou aqui')
 		const openedCashier = await this.cashierMovimentsRepository.create({
 			value,
 			user_id,

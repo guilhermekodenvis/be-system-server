@@ -5,11 +5,15 @@ import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 import GetMovimentsToCloseCashierService from '@modules/cashier_moviments/services/GetMovimentsToCloseCashierService'
 import GetCashierSituationService from '@modules/cashier_moviments/services/GetCashierSituationService'
+import {
+	CLOSE_CASHIER_MOVIMENT,
+	OPEN_CASHIER_MOVIMENT,
+} from '../../typeorm/entities/CashierMoviment'
 
 export default class CashierMovimentsController {
 	public async open(request: Request, response: Response): Promise<Response> {
 		const { value, password } = request.body
-		const action = 0
+		const action = OPEN_CASHIER_MOVIMENT
 		const { id: user_id } = request.user
 
 		const openCashierMoviment = container.resolve(
@@ -28,16 +32,17 @@ export default class CashierMovimentsController {
 
 	public async close(request: Request, response: Response): Promise<Response> {
 		const closeCashierMoviment = container.resolve(CloseCashierMovimentService)
-		const { observation } = request.body
-		const action = 6
+		const { observation, password } = request.body
+		const action = CLOSE_CASHIER_MOVIMENT
 		const { id: user_id } = request.user
-		const cashierMoviment = closeCashierMoviment.run({
+		await closeCashierMoviment.run({
 			observation,
 			user_id,
 			action,
+			password,
 		})
 
-		return response.status(201).json(cashierMoviment)
+		return response.status(201).json('ok')
 	}
 
 	public async createMany(

@@ -22,7 +22,8 @@ cashierMovimentsRoutes.post(
 	'/close',
 	celebrate({
 		[Segments.BODY]: {
-			observation: Joi.string().required(),
+			observation: Joi.string(),
+			password: Joi.string().required(),
 		},
 	}),
 	cashierMovimentsController.close,
