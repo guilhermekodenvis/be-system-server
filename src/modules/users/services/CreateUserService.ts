@@ -27,7 +27,6 @@ class CreateUserService {
 	}: ICreateUserDTO): Promise<User> {
 		const checkUserEmailExists = await this.usersRepository.findByEmail(email)
 
-		console.log(checkUserEmailExists)
 		if (checkUserEmailExists) {
 			throw new AppError('Ops! O e-mail já está em uso...')
 		}

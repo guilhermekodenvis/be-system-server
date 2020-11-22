@@ -56,8 +56,8 @@ export default class TableRequestsRepository implements ITableRequestsRepository
 
 	public async destroy({
 		tableRequest,
-	}: IDataDestroyTableRequestDTO): Promise<DeleteResult> {
-		return this.ormRepository.delete(tableRequest)
+	}: IDataDestroyTableRequestDTO): Promise<void> {
+		await this.ormRepository.delete(tableRequest)
 	}
 
 	public async findByTableNumber({

@@ -1,6 +1,4 @@
 import 'reflect-metadata'
-import AppError from '@shared/errors/AppError'
-import { ObjectID } from 'typeorm'
 import InsertProductsIntoTableRequestService from './InsertProductsIntoTableRequestService'
 import FakeTableRequestsRepository from '../repositories/fakes/FakeTableRequestsRepository'
 
@@ -25,8 +23,7 @@ describe('CreateProduct', () => {
 				},
 			],
 			user_id: 'user-id',
-			table_id: undefined,
-			table_number: 7,
+			table_id: '',
 		})
 
 		expect(tableRequest).toHaveProperty('id')

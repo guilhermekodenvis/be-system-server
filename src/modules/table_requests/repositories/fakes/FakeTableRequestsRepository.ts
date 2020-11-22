@@ -1,10 +1,15 @@
 import IDataCreateTableRequestDTO from '@modules/table_requests/dtos/IDataCreateTableRequestDTO'
+import IDataDestroyTableRequestDTO from '@modules/table_requests/dtos/IDataDestroyTableRequestDTO'
 import IDataGetTableDTO from '@modules/table_requests/dtos/IDataGetTableDTO'
 import IDataInsertProductsInTable from '@modules/table_requests/dtos/IDataInsertProductsInTable'
+import IDataRequestTableAviability from '@modules/table_requests/dtos/IDataRequestTableAviability'
 import TableRequest from '@modules/table_requests/infra/typeorm/schemas/TableRequests'
 import { ObjectID } from 'mongodb'
 import ITableRequestsRepository from '../ITableRequestsRepository'
 
+interface IDataFindTableRequests {
+	user_id: string
+}
 // eslint-disable-next-line prettier/prettier
 export default class FakeTableRequestsRepository implements ITableRequestsRepository {
 	tableRequests: TableRequest[] = []
@@ -39,6 +44,35 @@ export default class FakeTableRequestsRepository implements ITableRequestsReposi
 		})
 		this.tableRequests.push(tableRequest)
 
+		return tableRequest
+	}
+
+	public async findByUserId({
+		user_id,
+	}: IDataFindTableRequests): Promise<TableRequest[]> {
+		const findTableRequests = this.tableRequests.filter(
+			tableRequest => tableRequest.user_id === user_id,
+		)
+
+		return findTableRequests
+	}
+
+	public async destroy({
+		tableRequest,
+	}: IDataDestroyTableRequestDTO): Promise<void> {
+		const findIndex = this.tableRequests.findIndex(
+			currentTR => currentTR.id === tableRequest.id,
+		)
+		this.tableRequests.splice(findIndex, 1)
+	}
+
+	public async findByTableNumber({
+		number,
+		user_id,
+	}: IDataRequestTableAviability): Promise<TableRequest | undefined> {
+		const tableRequest = this.tableRequests.find(
+			tr => tr.number === number && tr.user_id === user_id,
+		)
 		return tableRequest
 	}
 }

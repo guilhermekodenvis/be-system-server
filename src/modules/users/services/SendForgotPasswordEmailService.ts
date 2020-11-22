@@ -39,8 +39,6 @@ class SendForgotPasswordEmailService {
 			'forgot_password.hbs',
 		)
 
-		console.log(process.env.APP_WEB_URL)
-
 		await this.mailProvider.sendMail({
 			to: {
 				name: user.user_name,

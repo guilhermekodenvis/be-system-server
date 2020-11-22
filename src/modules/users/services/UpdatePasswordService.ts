@@ -1,5 +1,6 @@
 import AppError from '@shared/errors/AppError'
 import { injectable, inject } from 'tsyringe'
+import User from '../infra/typeorm/entities/User'
 import IHashProvider from '../providers/HashProvider/models/IHashProvider'
 import IUsersRepository from '../repositories/IUsersRepository'
 
@@ -19,7 +20,11 @@ export default class UpdatePasswordService {
 		private hashProvider: IHashProvider,
 	) {}
 
-	public async run({ password, old_password, user_id }: IRequest) {
+	public async run({
+		password,
+		old_password,
+		user_id,
+	}: IRequest): Promise<User> {
 		const user = await this.usersRepository.findById(user_id)
 
 		if (!user) {
@@ -38,7 +43,10 @@ export default class UpdatePasswordService {
 
 			user.password = await this.hashProvider.generateHash(password)
 
-			return this.usersRepository.save(user)
+			const savedUser = await this.usersRepository.save(user)
+
+			return savedUser
 		}
+		throw new AppError('Informe a senha nova e a antiga para continuar')
 	}
 }

@@ -44,8 +44,6 @@ export default class RegisterCashierMovimentService {
 			action,
 		})
 
-		console.log(openedCashier)
-
 		return openedCashier
 	}
 }

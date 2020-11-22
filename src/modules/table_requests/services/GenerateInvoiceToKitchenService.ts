@@ -16,7 +16,9 @@ export default class GenerateInvoiceToKitchenService {
 	public async run({ tableRequest }: IGenerateDTO): Promise<string> {
 		const productsFormatted = tableRequest.products.map(
 			product =>
-				`${product.quantity}x - ${product.product_name}\n${product.observation}\n--------------------------\n\n`,
+				`${product.quantity}x - ${product.product_name}\n${
+					product.observation || ''
+				}\n--------------------------\n\n`,
 		)
 
 		const productText = productsFormatted.reduce((a, b) => a + b)
