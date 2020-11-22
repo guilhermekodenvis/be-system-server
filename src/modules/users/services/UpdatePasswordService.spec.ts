@@ -73,4 +73,22 @@ describe('UpdatePassword', () => {
 			}),
 		).rejects.toBeInstanceOf(AppError)
 	})
+
+	it('should not be able to update with non existent user', async () => {
+		await fakeUsersRepository.create({
+			restaurant_name: 'Comidinhas Vinhedo',
+			user_name: 'Mãe do Nobrega',
+			email: 'mae@do.nobrega',
+			password: '123456',
+			cnpj: '12333444555512',
+		})
+
+		await expect(
+			updatePassword.run({
+				user_id: 'wrong-user-id',
+				password: '123123',
+				old_password: '123456',
+			}),
+		).rejects.toBeInstanceOf(AppError)
+	})
 })
