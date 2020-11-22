@@ -1,13 +1,11 @@
 import 'reflect-metadata'
 import AppError from '@shared/errors/AppError'
 
-// import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository'
 import FakeProductsRepository from '../repositories/fakes/FakeProductsRepository'
 import CreateProductService from './CreateProductService'
 import IProductsRepository from '../repositories/IProductsRepository'
 
-// let fakeCacheProvider: FakeCacheProvider;
 let createProductService: CreateProductService
 let fakeProductsRepository: IProductsRepository
 let fakeUsersRepository: FakeUsersRepository
@@ -15,7 +13,6 @@ let fakeUsersRepository: FakeUsersRepository
 describe('CreateProduct', () => {
 	beforeEach(() => {
 		fakeProductsRepository = new FakeProductsRepository()
-		// fakeCacheProvider = new FakeCacheProvider();
 		fakeUsersRepository = new FakeUsersRepository()
 		createProductService = new CreateProductService(
 			fakeProductsRepository,

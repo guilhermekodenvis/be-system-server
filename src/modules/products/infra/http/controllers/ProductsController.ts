@@ -1,7 +1,7 @@
 import CreateProductService from '@modules/products/services/CreateProductService'
 import DeleteProductService from '@modules/products/services/DeleteProductService'
 import GetCategoriesService from '@modules/products/services/GetCategoriesService'
-import ListProductsService from '@modules/products/services/ListProductsService'
+import GetProductsFromUserService from '@modules/products/services/GetProductsFromUserService'
 import ShowProductService from '@modules/products/services/ShowProductService'
 import UpdateProductService from '@modules/products/services/UpdateProductService'
 import { Request, Response } from 'express'
@@ -9,7 +9,7 @@ import { container } from 'tsyringe'
 
 class ProductsController {
 	public async index(request: Request, response: Response): Promise<Response> {
-		const listProductsService = container.resolve(ListProductsService)
+		const listProductsService = container.resolve(GetProductsFromUserService)
 		const { id: user_id } = request.user
 
 		const products = await listProductsService.run({ user_id })
@@ -81,19 +81,6 @@ class ProductsController {
 		})
 
 		return response.json(product)
-	}
-
-	public async categories(
-		request: Request,
-		response: Response,
-	): Promise<Response> {
-		const { id: user_id } = request.user
-		const showProductService = container.resolve(GetCategoriesService)
-		const products = await showProductService.run({
-			user_id,
-		})
-
-		return response.json(products)
 	}
 }
 

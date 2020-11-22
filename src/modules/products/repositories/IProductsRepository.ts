@@ -6,6 +6,5 @@ export default interface IProductsRepository {
 	save(product: Product): Promise<Product>
 	delete(product: Product): Promise<void>
 	getProductById(product_id: string): Promise<Product | undefined>
-	getProductsByUserId(user_id: string): Promise<Product[] | undefined>
-	getCategoriesByUserId(user_id: string): Promise<Array<Product>>
+	getProductsByUserId(user_id: string): Promise<Product[]>
 }

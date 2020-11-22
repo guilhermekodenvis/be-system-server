@@ -1,23 +1,20 @@
 import 'reflect-metadata'
 import AppError from '@shared/errors/AppError'
 
-// import FakeCacheProvider from '@shared/container/providers/CacheProvider/fakes/FakeCacheProvider';
 import FakeUsersRepository from '@modules/users/repositories/fakes/FakeUsersRepository'
 import FakeProductsRepository from '../repositories/fakes/FakeProductsRepository'
 import IProductsRepository from '../repositories/IProductsRepository'
-import ListProductsService from './ListProductsService'
+import GetProductsFromUserService from './GetProductsFromUserService'
 
-// let fakeCacheProvider: FakeCacheProvider;
-let listProducts: ListProductsService
+let listProducts: GetProductsFromUserService
 let fakeProductsRepository: IProductsRepository
 let fakeUsersRepository: FakeUsersRepository
 
 describe('CreateProduct', () => {
 	beforeEach(() => {
 		fakeProductsRepository = new FakeProductsRepository()
-		// fakeCacheProvider = new FakeCacheProvider();
 		fakeUsersRepository = new FakeUsersRepository()
-		listProducts = new ListProductsService(
+		listProducts = new GetProductsFromUserService(
 			fakeProductsRepository,
 			fakeUsersRepository,
 		)
@@ -52,7 +49,7 @@ describe('CreateProduct', () => {
 
 		const products = await listProducts.run({ user_id: user.id })
 
-		expect(products?.length).toBe(2)
+		expect(products.length).toBe(2)
 	})
 
 	it('should not be able to see the product list with wrong user id', async () => {
@@ -124,6 +121,6 @@ describe('CreateProduct', () => {
 
 		const productsList = await listProducts.run({ user_id: otherUser.id })
 
-		expect(productsList?.length).toBe(0)
+		expect(productsList.length).toBe(0)
 	})
 })

@@ -1,5 +1,4 @@
 import { inject, injectable } from 'tsyringe'
-import Product from '../infra/typeorm/entities/Product'
 import IProductsRepository from '../repositories/IProductsRepository'
 
 interface IDataGetCategories {
@@ -10,15 +9,18 @@ interface IDataGetCategories {
 class GetCategoriesService {
 	constructor(
 		@inject('ProductsRepository')
-		private productsRepository: IProductsRepository, // @inject('UsersRepository') // private usersRepository: IUsersRepository,
+		private productsRepository: IProductsRepository,
 	) {}
 
-	public async run({ user_id }: IDataGetCategories): Promise<Array<Product>> {
-		const categories = await this.productsRepository.getCategoriesByUserId(
-			user_id,
-		)
+	public async run({ user_id }: IDataGetCategories): Promise<Array<string>> {
+		const products = await this.productsRepository.getProductsByUserId(user_id)
+		const categories: string[] = []
 
-		return categories
+		products.forEach(product => categories.push(product.category))
+
+		const settedCategories = [...new Set(categories)]
+
+		return settedCategories
 	}
 }
 

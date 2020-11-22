@@ -9,6 +9,7 @@ const productsController = new ProductsController()
 productsRouter.use(ensureAuthenticated)
 
 productsRouter.get('/', productsController.index)
+
 productsRouter.post(
 	'/',
 	celebrate({
@@ -22,7 +23,6 @@ productsRouter.post(
 	}),
 	productsController.create,
 )
-productsRouter.get('/categories', productsController.categories)
 
 productsRouter.put(
 	'/:product_id',
@@ -37,6 +37,7 @@ productsRouter.put(
 	}),
 	productsController.update,
 )
+
 productsRouter.delete('/:product_id', productsController.delete)
 
 productsRouter.get('/:product_id', productsController.show)

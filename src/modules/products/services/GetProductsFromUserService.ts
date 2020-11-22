@@ -9,7 +9,7 @@ interface IRequestDTO {
 }
 
 @injectable()
-class ListProductsService {
+class GetProductsFromUserService {
 	constructor(
 		@inject('ProductsRepository')
 		private productsRepository: IProductsRepository,
@@ -18,7 +18,7 @@ class ListProductsService {
 		private usersRepository: IUsersRepository,
 	) {}
 
-	public async run({ user_id }: IRequestDTO): Promise<Product[] | undefined> {
+	public async run({ user_id }: IRequestDTO): Promise<Product[]> {
 		const user = await this.usersRepository.findById(user_id)
 		if (!user) {
 			throw new AppError('Usuário não encontrado.')
@@ -29,4 +29,4 @@ class ListProductsService {
 	}
 }
 
-export default ListProductsService
+export default GetProductsFromUserService

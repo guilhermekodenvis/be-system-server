@@ -34,23 +34,12 @@ class ProductsRepository implements IProductsRepository {
 		this.ormRepository.delete({ id: product.id })
 	}
 
-	public async getProductsByUserId(
-		user_id: string,
-	): Promise<Product[] | undefined> {
+	public async getProductsByUserId(user_id: string): Promise<Product[]> {
 		const products = await this.ormRepository.find({
 			where: { user_id },
 		})
 
 		return products
-	}
-
-	public async getCategoriesByUserId(user_id: string): Promise<Array<Product>> {
-		const categories = await this.ormRepository.find({
-			where: { user_id },
-			select: ['category'],
-		})
-
-		return categories
 	}
 }
 

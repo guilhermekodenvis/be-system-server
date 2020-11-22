@@ -14,9 +14,7 @@ export default class FakeProductsRepository implements IProductsRepository {
 		return findProduct
 	}
 
-	public async getProductsByUserId(
-		user_id: string,
-	): Promise<Product[] | undefined> {
+	public async getProductsByUserId(user_id: string): Promise<Product[]> {
 		const findProducts = this.products.filter(
 			product => product.user_id === user_id,
 		)
@@ -50,13 +48,5 @@ export default class FakeProductsRepository implements IProductsRepository {
 		)
 
 		this.products.splice(findIndex, 1)
-	}
-
-	public async getCategoriesByUserId(user_id: string): Promise<Array<Product>> {
-		const findProducts = this.products.filter(
-			product => product.user_id === user_id,
-		)
-
-		return findProducts
 	}
 }
