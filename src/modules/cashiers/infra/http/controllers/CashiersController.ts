@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 import GetAllRegistersSinceLastAppertureService from '@modules/cashiers/services/GetAllRegistersSinceLastAppertureService'
 import GetCashierSituationService from '@modules/cashiers/services/GetCashierSituationService'
-import CreateMovimentInCashierService from '@modules/cashiers/services/CreateMovimentInCashierService'
+import CreateRegisterInCashierWorkingDateService from '@modules/cashiers/services/CreateRegisterInCashierWorkingDateService'
 
 export default class CashiersController {
 	public async index(request: Request, response: Response): Promise<Response> {
@@ -36,7 +36,7 @@ export default class CashiersController {
 		const { id: user_id } = request.user
 
 		const createMovimentInCashier = container.resolve(
-			CreateMovimentInCashierService,
+			CreateRegisterInCashierWorkingDateService,
 		)
 
 		const cashierMoviment = await createMovimentInCashier.run({
