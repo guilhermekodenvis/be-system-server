@@ -9,8 +9,8 @@ import {
 	UpdateDateColumn,
 } from 'typeorm'
 
-@Entity('cashier_moviments')
-class CashierMoviment {
+@Entity('cashier')
+class Cashier {
 	@PrimaryGeneratedColumn('uuid')
 	id: string
 
@@ -34,7 +34,7 @@ class CashierMoviment {
 	updated_at: Date
 }
 
-export default CashierMoviment
+export default Cashier
 
 export const OPEN_CASHIER_MOVIMENT = 0
 export const PAY_WITH_DEBIT_MOVIMENT = 1

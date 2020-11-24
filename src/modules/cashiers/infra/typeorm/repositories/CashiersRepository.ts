@@ -1,27 +1,26 @@
-import IGetCashierSituation from '@modules/cashier_moviments/dtos/IGetCashierSituation'
-import IGetMovimentsDTO from '@modules/cashier_moviments/dtos/IGetMovimentsDTO'
-import ICashierMovimentDTO from '@modules/cashier_moviments/dtos/IRegisterCashierMovimentDTO'
-import ICashierMovimentsRepository from '@modules/cashier_moviments/repositories/ICashierMovimentsRepository'
+import IGetCashierSituation from '@modules/cashiers/dtos/IGetCashierSituation'
+import IGetMovimentsDTO from '@modules/cashiers/dtos/IGetMovimentsDTO'
+import ICashierMovimentDTO from '@modules/cashiers/dtos/IRegisterCashierMovimentDTO'
+import ICashiersRepository from '@modules/cashiers/repositories/ICashiersRepository'
 import { getRepository, Raw, Repository } from 'typeorm'
-import CashierMoviment, {
+import Cashier, {
 	CLOSE_CASHIER_MOVIMENT,
 	OPEN_CASHIER_MOVIMENT,
-} from '../entities/CashierMoviment'
+} from '../entities/Cashier'
 
 // eslint-disable-next-line prettier/prettier
-export default class CashierMovimentsRepository implements ICashierMovimentsRepository {
-
-	private ormRepository: Repository<CashierMoviment>
+export default class CashiersRepository implements ICashiersRepository {
+	private ormRepository: Repository<Cashier>
 
 	constructor() {
-		this.ormRepository = getRepository(CashierMoviment)
+		this.ormRepository = getRepository(Cashier)
 	}
 
 	public async create({
 		action,
 		user_id,
 		value,
-	}: ICashierMovimentDTO): Promise<CashierMoviment> {
+	}: ICashierMovimentDTO): Promise<Cashier> {
 		const cashierMoviment = this.ormRepository.create({
 			value,
 			user_id,
@@ -33,10 +32,10 @@ export default class CashierMovimentsRepository implements ICashierMovimentsRepo
 		return cashierMoviment
 	}
 
-	public async getAllMovimentsOfTheDay({
+	public async findAllMovimentsOfTheDay({
 		date,
 		user_id,
-	}: IGetMovimentsDTO): Promise<CashierMoviment[]> {
+	}: IGetMovimentsDTO): Promise<Cashier[]> {
 		const { day, month, year } = date
 		const parsedDay = String(day).padStart(2, '0')
 		const parsedMonth = String(month + 1).padStart(2, '0')
@@ -54,9 +53,9 @@ export default class CashierMovimentsRepository implements ICashierMovimentsRepo
 		return cashierMoviments
 	}
 
-	public async getLastApperture({
+	public async findLastApperture({
 		user_id,
-	}: IGetCashierSituation): Promise<CashierMoviment | undefined> {
+	}: IGetCashierSituation): Promise<Cashier | undefined> {
 		const lastApperture = await this.ormRepository.findOne({
 			where: {
 				action: OPEN_CASHIER_MOVIMENT,
@@ -69,9 +68,9 @@ export default class CashierMovimentsRepository implements ICashierMovimentsRepo
 		return lastApperture
 	}
 
-	public async getLastClose({
+	public async findLastClose({
 		user_id,
-	}: IGetCashierSituation): Promise<CashierMoviment | undefined> {
+	}: IGetCashierSituation): Promise<Cashier | undefined> {
 		const lastClose = await this.ormRepository.findOne({
 			where: {
 				action: CLOSE_CASHIER_MOVIMENT,

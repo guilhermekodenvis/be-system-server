@@ -1,24 +1,24 @@
 import { inject, injectable } from 'tsyringe'
 import { isAfter } from 'date-fns'
 import IGetCashierSituation from '../dtos/IGetCashierSituation'
-import ICashierMovimentsRepository from '../repositories/ICashierMovimentsRepository'
+import ICashiersRepository from '../repositories/ICashiersRepository'
 
 @injectable()
 export default class GetCashierSituationService {
 	constructor(
 		@inject('CashierMovimentsRepository')
-		private cashierMovimentsRepository: ICashierMovimentsRepository,
+		private cashierMovimentsRepository: ICashiersRepository,
 	) {}
 
 	public async run({
 		user_id,
 	}: IGetCashierSituation): Promise<{ isOpen: boolean }> {
-		const lastAperture = await this.cashierMovimentsRepository.getLastApperture(
+		const lastAperture = await this.cashierMovimentsRepository.findLastApperture(
 			{
 				user_id,
 			},
 		)
-		const lastClose = await this.cashierMovimentsRepository.getLastClose({
+		const lastClose = await this.cashierMovimentsRepository.findLastClose({
 			user_id,
 		})
 
