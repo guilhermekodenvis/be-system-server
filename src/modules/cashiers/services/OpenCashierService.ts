@@ -56,7 +56,7 @@ export default class OpenCashierService {
 
 		const today = Date.now()
 
-		const workingDate = await this.cashiersRepository.startNewWorkingDay({
+		const workingDate = await this.cashiersRepository.startNewWorkingDate({
 			day: getDate(today),
 			month: getMonth(today),
 			year: getYear(today),
