@@ -3,6 +3,7 @@ import FakePDFProvider from '@shared/container/providers/PDFProvider/fakes/FakeP
 import IPDFProvider from '@shared/container/providers/PDFProvider/models/IPDFProvider'
 import AppError from '@shared/errors/AppError'
 import GenerateInvoiceToKitchenService from './GenerateInvoiceToKitchenService'
+import Product from '../infra/typeorm/schemas/Product'
 
 let generateInvoiceToKitchen: GenerateInvoiceToKitchenService
 let fakePdfProvider: IPDFProvider
@@ -29,9 +30,8 @@ describe('GenerateInvoiceToKitchen', () => {
 					product_id: 'id',
 					product_name: 'name',
 					product_price: 10,
-					observation: 'obs',
 					quantity: 2,
-				},
+				} as Product,
 			],
 			table_number: 10,
 		})
