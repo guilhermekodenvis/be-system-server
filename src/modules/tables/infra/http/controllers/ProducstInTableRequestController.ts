@@ -1,6 +1,6 @@
-import FindTableRequestService from '@modules/table_requests/services/FindTableRequestService'
-import InsertProductsIntoTableRequestService from '@modules/table_requests/services/InsertProductsIntoTableRequestService'
-import GenerateInvoiceToKitchenService from '@modules/table_requests/services/GenerateInvoiceToKitchenService'
+import FindTableRequestService from '@modules/tables/services/FindTableService'
+import InsertProductsIntoTableService from '@modules/tables/services/InsertProductsIntoTableService'
+import GenerateInvoiceToKitchenService from '@modules/tables/services/GenerateInvoiceToKitchenService'
 import { Request, Response } from 'express'
 import { container } from 'tsyringe'
 
@@ -10,7 +10,7 @@ export default class ProducstInTableRequestController {
 		const { id } = request.user
 
 		const insertProductsIntoTableRequest = container.resolve(
-			InsertProductsIntoTableRequestService,
+			InsertProductsIntoTableService,
 		)
 
 		const generateInvoiceToKitchen = container.resolve(

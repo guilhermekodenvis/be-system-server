@@ -6,10 +6,10 @@ import {
 	UpdateDateColumn,
 	ObjectIdColumn,
 } from 'typeorm'
-import ProductsInTable from './ProductsInTable'
+import Product from './Product'
 
 @Entity('table_requests')
-class TableRequest {
+class Table {
 	@ObjectIdColumn()
 	id: ObjectID
 
@@ -17,8 +17,8 @@ class TableRequest {
 	number: number
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	@Column(type => ProductsInTable)
-	products: ProductsInTable[]
+	@Column(type => Product)
+	products: Product[]
 
 	@Column('uuid')
 	user_id: string
@@ -30,4 +30,4 @@ class TableRequest {
 	updated_at: Date
 }
 
-export default TableRequest
+export default Table

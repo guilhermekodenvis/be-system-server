@@ -1,6 +1,5 @@
-import AppError from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
-import ITableRequestsRepository from '../repositories/ITableRequestsRepository'
+import ITablesRepository from '../repositories/ITableRequestsRepository'
 
 interface IRequestDTO {
 	number: number
@@ -11,22 +10,15 @@ interface IRequestDTO {
 export default class CheckTableAviabilityService {
 	constructor(
 		@inject('TableRequestsRepository')
-		private tableRequestsRepository: ITableRequestsRepository,
+		private tableRequestsRepository: ITablesRepository,
 	) {}
 
 	public async run({ number, user_id }: IRequestDTO): Promise<boolean> {
-		if (isNaN(number)) {
-			throw new AppError('oops! Precisa ser um número.')
-		}
-
 		const tableRequest = await this.tableRequestsRepository.findByTableNumber({
 			number,
 			user_id,
 		})
 
-		if (tableRequest) {
-			return true
-		}
-		return false
+		return !tableRequest
 	}
 }

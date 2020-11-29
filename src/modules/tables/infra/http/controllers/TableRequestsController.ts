@@ -1,7 +1,7 @@
-import CreateTableRequestService from '@modules/table_requests/services/CreateTableRequestService'
+import CreateTableService from '@modules/tables/services/CreateTableService'
 import { Request, Response } from 'express'
-import FindTableRequestsService from '@modules/table_requests/services/FindTableRequestsService'
-import CheckTableAviabilityService from '@modules/table_requests/services/CheckTableAviabilityService'
+import FindAllTablesFromUserService from '@modules/tables/services/FindAllTablesFromUserService'
+import CheckTableAviabilityService from '@modules/tables/services/CheckTableAviabilityService'
 import { container } from 'tsyringe'
 
 export default class TableRequestsController {
@@ -9,7 +9,7 @@ export default class TableRequestsController {
 		const { table_number } = request.body
 		const { id } = request.user
 
-		const createTableRequest = container.resolve(CreateTableRequestService)
+		const createTableRequest = container.resolve(CreateTableService)
 		const table = await createTableRequest.run({
 			table_number,
 			user_id: id,
@@ -20,7 +20,7 @@ export default class TableRequestsController {
 
 	public async index(request: Request, response: Response): Promise<Response> {
 		const { id } = request.user
-		const findTableRequests = container.resolve(FindTableRequestsService)
+		const findTableRequests = container.resolve(FindAllTablesFromUserService)
 		const tableRequests = await findTableRequests.run({ user_id: id })
 		return response.json(tableRequests)
 	}

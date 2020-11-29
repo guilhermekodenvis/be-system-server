@@ -6,7 +6,7 @@ import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAut
 import passwordRouter from '@modules/users/infra/http/routes/password.routes'
 import productsRouter from '@modules/products/infra/http/routes/products.routes'
 import cashiersRoutes from '@modules/cashiers/infra/http/routes/cashiers.routes'
-import tableResquestsRoutes from '@modules/table_requests/infra/http/routes/tableRequests.routes'
+import tableResquestsRoutes from '@modules/tables/infra/http/routes/tableRequests.routes'
 import profileRouter from '@modules/users/infra/http/routes/profile.routes'
 import categoriesRouter from '@modules/products/infra/http/routes/categories.routes'
 

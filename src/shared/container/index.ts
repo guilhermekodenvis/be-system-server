@@ -14,8 +14,8 @@ import ProductsRepository from '@modules/products/infra/typeorm/repositories/Pro
 import INotificationsRepository from '@modules/notifications/repositories/INotificationsRepository'
 import NotificationsRepository from '@modules/notifications/infra/typeorm/repositories/NotificationsRepository'
 
-import ITableRequestsRepository from '@modules/table_requests/repositories/ITableRequestsRepository'
-import TableRequestsRepository from '@modules/table_requests/infra/typeorm/repositories/TableRequestsRepository'
+import ITablesRepository from '@modules/tables/repositories/ITableRequestsRepository'
+import TableRequestsRepository from '@modules/tables/infra/typeorm/repositories/TableRequestsRepository'
 
 import ICashiersRepository from '@modules/cashiers/repositories/ICashiersRepository'
 import CashiersRepository from '@modules/cashiers/infra/typeorm/repositories/CashiersRepository'
@@ -45,7 +45,7 @@ container.registerSingleton<ICashiersRepository>(
 	CashiersRepository,
 )
 
-container.registerSingleton<ITableRequestsRepository>(
+container.registerSingleton<ITablesRepository>(
 	'TableRequestsRepository',
 	TableRequestsRepository,
 )

@@ -1,6 +1,6 @@
 import { Column } from 'typeorm'
 
-class ProductsInTable {
+class Product {
 	@Column('uuid')
 	product_id: string
 
@@ -17,4 +17,4 @@ class ProductsInTable {
 	product_name: string
 }
 
-export default ProductsInTable
+export default Product
