@@ -1,4 +1,4 @@
-import { ObjectID } from 'typeorm'
+import { ObjectID } from 'mongodb'
 
 export default interface IGetMoneyInCashierDTO {
 	user_id: string

@@ -20,8 +20,7 @@ export default class CreateRegisterInCashierWorkingDateService {
 		action,
 		value,
 		user_id,
-		working_date_id,
-	}: ICreateNewRegisterDTO): Promise<Register> {
+	}: Omit<ICreateNewRegisterDTO, 'working_date_id'>): Promise<Register> {
 		if (action === OPEN_CASHIER_MOVIMENT) {
 			throw new AppError(
 				'não será possível registrar uma nova abertura num dia de trabalho em andamento.',
@@ -35,15 +34,18 @@ export default class CreateRegisterInCashierWorkingDateService {
 			realValue = value
 		}
 
+		const workingDateId = await this.cashiersRepository.getLastWorkingDate({
+			user_id,
+		})
+
 		if (action === BLEED_MOVIMENT) {
 			const totalMoneyInCashier = await this.cashiersRepository.getMoneyInCashier(
 				{
 					user_id,
-					working_date_id,
+					working_date_id: workingDateId,
 				},
 			)
 
-			console.log(totalMoneyInCashier, value)
 			if (totalMoneyInCashier < value) {
 				throw new AppError(
 					'Não será possível registrar uma sangria com valor maior do que a quantidade de dinheiro em caixa',
@@ -54,7 +56,7 @@ export default class CreateRegisterInCashierWorkingDateService {
 		const register = await this.cashiersRepository.createRegisterInCashierWorkingDate(
 			{
 				action,
-				working_date_id,
+				working_date_id: workingDateId,
 				value: realValue,
 				user_id,
 			},

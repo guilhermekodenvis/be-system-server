@@ -1,25 +1,46 @@
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated'
 import { celebrate, Segments, Joi } from 'celebrate'
 import { Router } from 'express'
-import CashiersController from '../controllers/CashiersController'
+import RegistersController from '../controllers/RegistersController'
+import OpenCashierController from '../controllers/OpenCashierController'
+import CloseCashierController from '../controllers/CloseCashierController'
 
 const cashiersRoutes = Router()
 cashiersRoutes.use(ensureAuthenticated)
-const cashiersController = new CashiersController()
-
-cashiersRoutes.get('/', cashiersController.index)
+const registersController = new RegistersController()
+const openCashierController = new OpenCashierController()
+const closeCashierController = new CloseCashierController()
 
 cashiersRoutes.post(
-	'/',
+	'/open',
 	celebrate({
 		[Segments.BODY]: {
 			value: Joi.number().required(),
-			action: Joi.number().required(),
+			password: Joi.string().required(),
 		},
 	}),
-	cashiersController.create,
+	openCashierController.create,
 )
 
-cashiersRoutes.get('/details', cashiersController.show)
+cashiersRoutes.post(
+	'/register',
+	celebrate({
+		[Segments.BODY]: {
+			value: Joi.number().required(),
+			action: Joi.number().integer().required(),
+		},
+	}),
+	registersController.create,
+)
+
+cashiersRoutes.post(
+	'/close',
+	celebrate({
+		[Segments.BODY]: {
+			password: Joi.string().required(),
+		},
+	}),
+	closeCashierController.create,
+)
 
 export default cashiersRoutes

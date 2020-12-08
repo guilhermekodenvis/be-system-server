@@ -1,4 +1,5 @@
 import ICreateNewRegisterDTO from '@modules/cashiers/dtos/ICreateNewRegisterDTO'
+import IGetLastWorkingDate from '@modules/cashiers/dtos/IGetLastWorkingDate'
 import IGetMoneyInCashierDTO from '@modules/cashiers/dtos/IGetMoneyInCashierDTO'
 import IOpenCashierDTO from '@modules/cashiers/dtos/IOpenCashierDTO'
 import IStartWorkingDayDTO from '@modules/cashiers/dtos/IStartWorkingDayDTO'
@@ -141,5 +142,19 @@ export default class FakeCashiersRepository implements ICashiersRepository {
 		cashier.is_open = false
 
 		return cashier
+	}
+
+	public async getLastWorkingDate({
+		user_id,
+	}: IGetLastWorkingDate): Promise<ObjectID> {
+		const cashier = this.cashiers.find(c => c.user_id === user_id)
+
+		if (!cashier) {
+			throw new AppError('Caixa não encontrado')
+		}
+
+		const countWD = cashier.working_dates.length
+
+		return cashier.working_dates[countWD - 1].id
 	}
 }

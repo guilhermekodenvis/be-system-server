@@ -66,19 +66,16 @@ describe('CreateRegisterInCashierWorkingDate', () => {
 			action: PAY_WITH_DEBIT_MOVIMENT,
 			user_id: user.id,
 			value: 10,
-			working_date_id: workingDate.id,
 		})
 		const moneyRegister = await createRegisterInCashierWorkingDate.run({
 			action: PAY_WITH_MONEY_MOVIMENT,
 			user_id: user.id,
 			value: 10,
-			working_date_id: workingDate.id,
 		})
 		const creditRegister = await createRegisterInCashierWorkingDate.run({
 			action: PAY_WITH_CREDIT_MOVIMENT,
 			user_id: user.id,
 			value: 10,
-			working_date_id: workingDate.id,
 		})
 
 		expect(debitRegister.value).toBeGreaterThan(0)
@@ -92,7 +89,6 @@ describe('CreateRegisterInCashierWorkingDate', () => {
 				action: OPEN_CASHIER_MOVIMENT,
 				user_id: user.id,
 				value: 10,
-				working_date_id: workingDate.id,
 			}),
 		).rejects.toBeInstanceOf(AppError)
 	})
@@ -102,13 +98,11 @@ describe('CreateRegisterInCashierWorkingDate', () => {
 			action: PAY_WITH_MONEY_MOVIMENT,
 			value: 50,
 			user_id: user.id,
-			working_date_id: workingDate.id,
 		})
 		const paybackRegister = await createRegisterInCashierWorkingDate.run({
 			action: PAYBACK_MOVIMENT,
 			value: 5,
 			user_id: user.id,
-			working_date_id: workingDate.id,
 		})
 		expect(paybackRegister.value).toBeLessThan(0)
 
@@ -116,7 +110,6 @@ describe('CreateRegisterInCashierWorkingDate', () => {
 			action: BLEED_MOVIMENT,
 			value: 5,
 			user_id: user.id,
-			working_date_id: workingDate.id,
 		})
 		expect(bleedRegister.value).toBeLessThan(0)
 	})
@@ -127,7 +120,6 @@ describe('CreateRegisterInCashierWorkingDate', () => {
 				action: BLEED_MOVIMENT,
 				value: 100000,
 				user_id: user.id,
-				working_date_id: workingDate.id,
 			}),
 		).rejects.toBeInstanceOf(AppError)
 	})
