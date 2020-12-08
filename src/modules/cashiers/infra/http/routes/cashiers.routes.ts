@@ -4,12 +4,14 @@ import { Router } from 'express'
 import RegistersController from '../controllers/RegistersController'
 import OpenCashierController from '../controllers/OpenCashierController'
 import CloseCashierController from '../controllers/CloseCashierController'
+import CashiersController from '../controllers/CashiersController'
 
 const cashiersRoutes = Router()
 cashiersRoutes.use(ensureAuthenticated)
 const registersController = new RegistersController()
 const openCashierController = new OpenCashierController()
 const closeCashierController = new CloseCashierController()
+const cashiersController = new CashiersController()
 
 cashiersRoutes.post(
 	'/open',
@@ -42,5 +44,9 @@ cashiersRoutes.post(
 	}),
 	closeCashierController.create,
 )
+
+cashiersRoutes.get('/situation', cashiersController.show)
+
+cashiersRoutes.get('/', cashiersController.index)
 
 export default cashiersRoutes
