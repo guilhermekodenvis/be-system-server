@@ -72,7 +72,6 @@ export default class CashiersRepository implements ICashiersRepository {
 
 	public async openCashier({
 		user_id,
-		value,
 	}: Pick<IOpenCashierDTO, 'value' | 'user_id'>): Promise<Cashier> {
 		const cashier = await this.ormRepository.findOne({ where: { user_id } })
 
