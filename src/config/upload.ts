@@ -46,7 +46,7 @@ export default {
 	config: {
 		disk: {},
 		aws: {
-			bucket: 'be-system',
+			bucket: 'besystem-files',
 		},
 	},
 } as IUploadConfig

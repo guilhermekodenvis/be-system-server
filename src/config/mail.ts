@@ -14,8 +14,8 @@ export default {
 
 	defaults: {
 		from: {
-			email: 'gui.sartori96@gmail.com',
-			name: 'Guilherme da Black Elephant',
+			email: 'guilherme@blackelephant.com.br',
+			name: 'Guilherme [beSystem]',
 		},
 	},
 } as IMailConfig
