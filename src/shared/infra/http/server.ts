@@ -2,6 +2,11 @@ import 'reflect-metadata'
 import 'dotenv/config'
 import 'express-async-errors'
 
+import path from 'path'
+
+import SESMailProvider from '@shared/container/providers/MailProvider/implementations/SESMailProvider'
+import HandlebarsMailTemplateProvider from '@shared/container/providers/MailTemplateProvider/implementations/HandlebarsMailTemplateProvider'
+
 import express, { Request, Response, NextFunction } from 'express'
 import cors from 'cors'
 import { errors } from 'celebrate'
@@ -26,21 +31,47 @@ app.use(routes)
 
 app.use(errors())
 
-app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
-	if (err instanceof AppError) {
-		return response.status(err.statusCode).json({
+app.use(
+	async (err: Error, request: Request, response: Response, _: NextFunction) => {
+		if (err instanceof AppError) {
+			const mailProvider = new SESMailProvider(
+				new HandlebarsMailTemplateProvider(),
+			)
+			const errorTemplate = path.resolve(
+				__dirname,
+				'views',
+				'error_template.hbs',
+			)
+
+			await mailProvider.sendMail({
+				to: {
+					email: 'gui.sartori96@gmail.com',
+					name: 'Guilherme Sartori',
+				},
+				subject: 'erro interno',
+				templateData: {
+					file: errorTemplate,
+					variables: {
+						name: 'Guilherme',
+						error: err.message,
+					},
+				},
+			})
+
+			return response.status(err.statusCode).json({
+				status: 'error',
+				message: err.message,
+			})
+		}
+
+		console.error(err)
+		// TODO: COLOCAR AQUI UMA MANEIRA DE GUARDAR O ERRO NO BANCO DE DADOS
+
+		return response.status(500).json({
 			status: 'error',
-			message: err.message,
+			message: 'Erro interno do servidor.',
 		})
-	}
-
-	console.error(err)
-	// TODO: COLOCAR AQUI UMA MANEIRA DE GUARDAR O ERRO NO BANCO DE DADOS
-
-	return response.status(500).json({
-		status: 'error',
-		message: 'Erro interno do servidor.',
-	})
-})
+	},
+)
 
 app.listen(PORT, () => console.log(`🐘 - Server is running on port ${PORT}...`))
