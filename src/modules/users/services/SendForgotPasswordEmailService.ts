@@ -40,17 +40,17 @@ class SendForgotPasswordEmailService {
 		)
 
 		await this.mailProvider.sendMail({
-			to: {
-				name: user.user_name,
-				email: user.email,
-			},
-			subject: '[beSystem] Recuperação de senha',
+			subject: 'Troca de senha',
 			templateData: {
 				file: forgotPasswordTemplate,
 				variables: {
 					name: user.user_name,
-					link: `${process.env.APP_WEB_URL}/esqueci-a-senha/${token}`,
+					link: `${process.env.APP_WEB_URL}/reset-password?token=${token}`,
 				},
+			},
+			to: {
+				email: user.email,
+				name: user.user_name,
 			},
 		})
 	}
