@@ -8,7 +8,7 @@ export default class OpenCashierController {
 		const { password } = request.body
 		const closeCashier = container.resolve(CloseCashierService)
 
-		const cashier = closeCashier.run({
+		const cashier = await closeCashier.run({
 			password,
 			user_id: id,
 		})

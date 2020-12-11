@@ -1,10 +1,7 @@
-import { Column, ObjectID, ObjectIdColumn } from 'typeorm'
+import { Column } from 'typeorm'
 import Register from './Register'
 
 class WorkingDate {
-	@ObjectIdColumn()
-	id: ObjectID
-
 	@Column()
 	day: number
 

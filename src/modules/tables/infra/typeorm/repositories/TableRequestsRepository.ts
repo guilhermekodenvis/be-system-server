@@ -55,9 +55,9 @@ export default class TableRequestsRepository implements ITablesRepository {
 	}
 
 	public async destroy({
-		tableRequest,
-	}: IDataDestroyTableRequestDTO): Promise<void> {
-		await this.ormRepository.delete(tableRequest)
+		table,
+	}: IDataDestroyTableRequestDTO): Promise<DeleteResult> {
+		return this.ormRepository.delete(table)
 	}
 
 	public async findByTableNumber({
@@ -69,5 +69,9 @@ export default class TableRequestsRepository implements ITablesRepository {
 		})
 
 		return table
+	}
+
+	public async findOneByTableId(table_id: string): Promise<Table | undefined> {
+		return this.ormRepository.findOne(table_id)
 	}
 }

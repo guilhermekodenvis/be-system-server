@@ -3,6 +3,7 @@ import { Request, Response } from 'express'
 import FindAllTablesFromUserService from '@modules/tables/services/FindAllTablesFromUserService'
 import CheckTableAviabilityService from '@modules/tables/services/CheckTableAviabilityService'
 import { container } from 'tsyringe'
+import DeleteTableService from '@modules/tables/services/DeleteTableService'
 
 export default class TableRequestsController {
 	public async create(request: Request, response: Response): Promise<Response> {
@@ -37,5 +38,13 @@ export default class TableRequestsController {
 			user_id: id,
 		})
 		return response.json({ is_available: isAvailable })
+	}
+
+	public async delete(request: Request, response: Response): Promise<Response> {
+		const { id } = request.params
+		const deleteTableRequest = container.resolve(DeleteTableService)
+		await deleteTableRequest.run({ table_id: id })
+
+		return response.status(200).json('ok')
 	}
 }

@@ -48,4 +48,6 @@ tableResquestsRoutes.get(
 	tableRequestsController.checkAviability,
 )
 
+tableResquestsRoutes.get('/delete/:id', tableRequestsController.delete)
+
 export default tableResquestsRoutes

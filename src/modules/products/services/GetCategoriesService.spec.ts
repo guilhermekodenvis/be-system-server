@@ -26,6 +26,12 @@ describe('GetCategories', () => {
 		expect(categories).toContain('fake-category')
 	})
 
+	it('should be able to get [] if has no categories yet', async () => {
+		const categories = await getCategories.run({ user_id: 'user-id' })
+
+		expect(categories).toEqual([])
+	})
+
 	it('should be able to show unduplicated categories', async () => {
 		await fakeProductsRepository.create({
 			name: 'fake-product',

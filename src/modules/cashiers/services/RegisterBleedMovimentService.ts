@@ -3,13 +3,18 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository'
 import AppError from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
 import { v4 } from 'uuid'
-import ICloseCashierDTO from '../dtos/ICloseCashierDTO'
-import { CLOSE_CASHIER_MOVIMENT } from '../enums/cashierMovimentActions'
+import IOpenCashierDTO from '../dtos/IOpenCashierDTO'
+import {
+	BLEED_MOVIMENT,
+	OPEN_CASHIER_MOVIMENT,
+	PAYBACK_MOVIMENT,
+	PAY_WITH_MONEY_MOVIMENT,
+} from '../enums/cashierMovimentActions'
 import Cashier from '../infra/typeorm/schemas/Cashier'
 import ICashiersRepository from '../repositories/ICashiersRepository'
 
 @injectable()
-export default class CloseCashierService {
+export default class RegisterBleedMovimentService {
 	constructor(
 		@inject('CashiersRepository')
 		private cashiersRepository: ICashiersRepository,
@@ -21,10 +26,15 @@ export default class CloseCashierService {
 		private usersRepository: IUsersRepository,
 	) {}
 
-	public async run({ user_id, password }: ICloseCashierDTO): Promise<Cashier> {
+	public async run({
+		user_id,
+		value,
+		password,
+	}: IOpenCashierDTO): Promise<Cashier> {
 		const user = await this.usersRepository.findById(user_id)
+
 		if (!user) {
-			throw new AppError('Usuário não encontrado')
+			throw new AppError('O usuário não foi encontrado')
 		}
 
 		const passwordVerify = await this.hashProvider.compareHash(
@@ -33,7 +43,7 @@ export default class CloseCashierService {
 		)
 
 		if (!passwordVerify) {
-			throw new AppError('A senha não corresponde')
+			throw new AppError('A senha não é válida.')
 		}
 
 		const cashier = await this.cashiersRepository.findCashierByUserId(user_id)
@@ -42,16 +52,36 @@ export default class CloseCashierService {
 			throw new AppError('Caixa não encontrado')
 		}
 
-		if (!cashier.is_open) {
-			throw new AppError('Não será possível fechar um caixa já fechado.')
+		const totalMoneyInCashier = cashier.working_dates[
+			cashier.working_dates.length - 1
+		].registers.reduce((total, current) => {
+			if (
+				current.action === BLEED_MOVIMENT ||
+				current.action === PAYBACK_MOVIMENT
+			) {
+				return total - current.value
+			}
+			if (
+				current.action === OPEN_CASHIER_MOVIMENT ||
+				current.action === PAY_WITH_MONEY_MOVIMENT
+			) {
+				return total + current.value
+			}
+			return total
+		}, 0)
+
+		if (totalMoneyInCashier < value) {
+			throw new AppError(
+				'Não será possível registrar uma sangria com valor maior do que a quantidade de dinheiro em caixa',
+			)
 		}
 
-		cashier.is_open = false
 		cashier.working_dates[cashier.working_dates.length - 1].registers.push({
-			action: CLOSE_CASHIER_MOVIMENT,
+			action: BLEED_MOVIMENT,
 			key: v4(),
-			value: 0,
+			value,
 		})
+
 		await this.cashiersRepository.update(cashier)
 
 		return cashier

@@ -1,3 +1,4 @@
+import { DeleteResult } from 'typeorm'
 import IDataCreateTableRequestDTO from '../dtos/IDataCreateTableRequestDTO'
 import IDataDestroyTableRequestDTO from '../dtos/IDataDestroyTableRequestDTO'
 import IDataGetTableDTO from '../dtos/IDataGetTableDTO'
@@ -14,8 +15,9 @@ export default interface ITablesRepository {
 	update(data: IDataInsertProductsInTable): Promise<Table>
 	createTable(data: IDataCreateTableRequestDTO): Promise<Table>
 	findByUserId(data: IDataFindTableRequests): Promise<Table[]>
-	destroy(data: IDataDestroyTableRequestDTO): Promise<void>
+	destroy(data: IDataDestroyTableRequestDTO): Promise<DeleteResult>
 	findByTableNumber(
 		data: IDataRequestTableAviability,
 	): Promise<Table | undefined>
+	findOneByTableId(table_id: string): Promise<Table | undefined>
 }

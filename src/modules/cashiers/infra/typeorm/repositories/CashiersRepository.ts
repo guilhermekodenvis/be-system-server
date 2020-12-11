@@ -2,6 +2,7 @@ import ICreateNewRegisterDTO from '@modules/cashiers/dtos/ICreateNewRegisterDTO'
 import IGetLastWorkingDate from '@modules/cashiers/dtos/IGetLastWorkingDate'
 import IGetMoneyInCashierDTO from '@modules/cashiers/dtos/IGetMoneyInCashierDTO'
 import IOpenCashierDTO from '@modules/cashiers/dtos/IOpenCashierDTO'
+import IRemoveRegisterDTO from '@modules/cashiers/dtos/IRemoveRegisterDTO'
 import IStartWorkingDayDTO from '@modules/cashiers/dtos/IStartWorkingDayDTO'
 import {
 	BLEED_MOVIMENT,
@@ -181,5 +182,46 @@ export default class CashiersRepository implements ICashiersRepository {
 		await this.ormRepository.update(cashier, cashier)
 
 		return cashier
+	}
+
+	public async removeRegisterInCashierWorkingDate({
+		id,
+		user_id,
+	}: IRemoveRegisterDTO): Promise<void> {
+		const cashier = await this.ormRepository.findOne({ where: { user_id } })
+
+		if (!cashier) {
+			throw new AppError('caixa não encontrado')
+		}
+
+		const { registers } = cashier.working_dates[
+			cashier.working_dates.length - 1
+		]
+
+		const findIndex = registers.findIndex(r => r.key === id)
+		registers.splice(findIndex, 1)
+
+		this.ormRepository.update(cashier, cashier)
+	}
+
+	public async findCashierByUserId(
+		user_id: string,
+	): Promise<Cashier | undefined> {
+		return this.ormRepository.findOne({ where: { user_id } })
+	}
+
+	public async create(user_id: string): Promise<Cashier> {
+		const cashier = this.ormRepository.create({
+			is_open: false,
+			user_id,
+		})
+
+		await this.ormRepository.save(cashier)
+
+		return cashier
+	}
+
+	public async update(cashier: Cashier): Promise<void> {
+		await this.ormRepository.save(cashier)
 	}
 }

@@ -18,6 +18,7 @@ import routes from './routes'
 
 import '@shared/infra/typeorm'
 import '@shared/container'
+import { container } from 'tsyringe'
 
 const PORT = process.env.PORT || 3333
 const app = express()
@@ -34,29 +35,29 @@ app.use(errors())
 app.use(
 	async (err: Error, request: Request, response: Response, _: NextFunction) => {
 		if (err instanceof AppError) {
-			const mailProvider = new SESMailProvider(
-				new HandlebarsMailTemplateProvider(),
-			)
-			const errorTemplate = path.resolve(
-				__dirname,
-				'views',
-				'error_template.hbs',
-			)
+			// const mailProvider = container.resolve(IMailProvider) new SESMailProvider(
+			// 	new HandlebarsMailTemplateProvider(),
+			// )
+			// const errorTemplate = path.resolve(
+			// 	__dirname,
+			// 	'views',
+			// 	'error_template.hbs',
+			// )
 
-			await mailProvider.sendMail({
-				to: {
-					email: 'gui.sartori96@gmail.com',
-					name: 'Guilherme Sartori',
-				},
-				subject: 'erro interno',
-				templateData: {
-					file: errorTemplate,
-					variables: {
-						name: 'Guilherme',
-						error: err.message,
-					},
-				},
-			})
+			// await mailProvider.sendMail({
+			// 	to: {
+			// 		email: 'gui.sartori96@gmail.com',
+			// 		name: 'Guilherme Sartori',
+			// 	},
+			// 	subject: 'erro interno',
+			// 	templateData: {
+			// 		file: errorTemplate,
+			// 		variables: {
+			// 			name: 'Guilherme',
+			// 			error: err.message,
+			// 		},
+			// 	},
+			// })
 
 			return response.status(err.statusCode).json({
 				status: 'error',

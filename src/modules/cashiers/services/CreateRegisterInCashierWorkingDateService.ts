@@ -1,10 +1,11 @@
 import AppError from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
+import { v4 } from 'uuid'
 import ICreateNewRegisterDTO from '../dtos/ICreateNewRegisterDTO'
 import {
 	BLEED_MOVIMENT,
+	CLOSE_CASHIER_MOVIMENT,
 	OPEN_CASHIER_MOVIMENT,
-	PAYBACK_MOVIMENT,
 } from '../enums/cashierMovimentActions'
 import Register from '../infra/typeorm/schemas/Register'
 import ICashiersRepository from '../repositories/ICashiersRepository'
@@ -21,48 +22,31 @@ export default class CreateRegisterInCashierWorkingDateService {
 		value,
 		user_id,
 	}: Omit<ICreateNewRegisterDTO, 'working_date_id'>): Promise<Register> {
-		if (action === OPEN_CASHIER_MOVIMENT) {
-			throw new AppError(
-				'não será possível registrar uma nova abertura num dia de trabalho em andamento.',
-			)
-		}
-
-		let realValue = 0
-		if (action === BLEED_MOVIMENT || action === PAYBACK_MOVIMENT) {
-			realValue = value * -1
-		} else {
-			realValue = value
-		}
-
-		const workingDateId = await this.cashiersRepository.getLastWorkingDate({
-			user_id,
-		})
-
-		if (action === BLEED_MOVIMENT) {
-			const totalMoneyInCashier = await this.cashiersRepository.getMoneyInCashier(
-				{
-					user_id,
-					working_date_id: workingDateId,
-				},
-			)
-
-			if (totalMoneyInCashier < value) {
-				throw new AppError(
-					'Não será possível registrar uma sangria com valor maior do que a quantidade de dinheiro em caixa',
-				)
-			}
-		}
-
-		const register = await this.cashiersRepository.createRegisterInCashierWorkingDate(
-			{
+		if (
+			[BLEED_MOVIMENT, OPEN_CASHIER_MOVIMENT, CLOSE_CASHIER_MOVIMENT].includes(
 				action,
-				working_date_id: workingDateId,
-				value: realValue,
-				user_id,
-			},
+			)
+		) {
+			throw new AppError('movimento não permitido.')
+		}
+
+		const cashier = await this.cashiersRepository.findCashierByUserId(user_id)
+
+		if (!cashier) {
+			throw new AppError('cannot insert in cashier that dont exists.')
+		}
+
+		const register = new Register()
+		register.action = action
+		register.key = v4()
+		register.value = value
+
+		cashier.working_dates[cashier.working_dates.length - 1].registers.push(
+			register,
 		)
+
+		await this.cashiersRepository.update(cashier)
 
 		return register
 	}
 }
-// TODO: FAZER FECHAMENTO DO CAIXA E FAZER REGISTRO DE NOVO PAGAMENTO E FAZER SANGRIA

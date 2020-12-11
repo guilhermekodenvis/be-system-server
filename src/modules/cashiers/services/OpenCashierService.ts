@@ -3,10 +3,13 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository'
 import AppError from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
 import { getDate, getMonth, getYear } from 'date-fns'
+import { v4 } from 'uuid'
 import IOpenCashierDTO from '../dtos/IOpenCashierDTO'
 import Cashier from '../infra/typeorm/schemas/Cashier'
 import ICashiersRepository from '../repositories/ICashiersRepository'
 import { OPEN_CASHIER_MOVIMENT } from '../enums/cashierMovimentActions'
+import WorkingDate from '../infra/typeorm/schemas/WorkingDate'
+import Register from '../infra/typeorm/schemas/Register'
 
 @injectable()
 export default class OpenCashierService {
@@ -41,34 +44,39 @@ export default class OpenCashierService {
 			throw new AppError('A senha não é válida.')
 		}
 
-		const isCashierAlreadyOpen = await this.cashiersRepository.getCashierSituation(
-			user_id,
-		)
+		let cashier = await this.cashiersRepository.findCashierByUserId(user_id)
 
-		if (isCashierAlreadyOpen) {
+		if (!cashier) {
+			cashier = await this.cashiersRepository.create(user_id)
+			cashier.working_dates = []
+		}
+
+		if (cashier.is_open) {
 			throw new AppError('Não pode abrir o caixa que já está aberto.')
 		}
 
-		const cashier = await this.cashiersRepository.openCashier({
-			user_id,
-			value,
-		})
+		cashier.is_open = true
 
 		const today = Date.now()
 
-		const workingDate = await this.cashiersRepository.startNewWorkingDate({
+		const workingDate = {
 			day: getDate(today),
 			month: getMonth(today),
 			year: getYear(today),
-			user_id,
-		})
+			registers: [],
+		} as WorkingDate
 
-		await this.cashiersRepository.createRegisterInCashierWorkingDate({
+		const register = {
+			key: v4(),
 			action: OPEN_CASHIER_MOVIMENT,
-			user_id,
 			value,
-			working_date_id: workingDate.id,
-		})
+		} as Register
+
+		workingDate.registers.push(register)
+
+		cashier.working_dates.push(workingDate)
+
+		await this.cashiersRepository.update(cashier)
 
 		return cashier
 	}

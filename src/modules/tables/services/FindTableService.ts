@@ -14,7 +14,9 @@ export default class FindTableRequestService {
 		private tableRequestsRepository: ITablesRepository,
 	) {}
 
-	public async run({ table_id }: IFindTableRequest): Promise<Table> {
+	public async run({
+		table_id,
+	}: IFindTableRequest): Promise<{ table: Table; total: number }> {
 		const table = await this.tableRequestsRepository.getTableRequest({
 			table_id,
 		})
@@ -23,6 +25,10 @@ export default class FindTableRequestService {
 			throw new AppError('A mesa não foi encontrada')
 		}
 
-		return table
+		const total = table.products.reduce((totalR, current) => {
+			return totalR + current.product_price * current.quantity
+		}, 0)
+
+		return { table: { ...table }, total }
 	}
 }

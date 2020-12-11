@@ -30,13 +30,14 @@ export default class FindAllTablesFromUserService {
 			const tableRequestFormatted = {
 				id: tr.id,
 				number: tr.number,
-				total: (() => {
-					const t = tr.products.reduce(
-						(a, b) => a + b.product_price * b.quantity,
-						0,
-					)
-					return t
-				})(),
+				total:
+					(() => {
+						const t = tr.products?.reduce(
+							(a, b) => a + b.product_price * b.quantity,
+							0,
+						)
+						return t
+					})() || 0,
 			}
 			return tableRequestFormatted
 		})

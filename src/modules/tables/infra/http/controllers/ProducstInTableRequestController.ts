@@ -23,7 +23,10 @@ export default class ProducstInTableRequestController {
 			user_id: id,
 		})
 
-		const fileName = await generateInvoiceToKitchen.run({ tableRequest })
+		const fileName = await generateInvoiceToKitchen.run({
+			products,
+			table_number: tableRequest.number,
+		})
 
 		return response
 			.status(201)
