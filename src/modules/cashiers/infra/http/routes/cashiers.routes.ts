@@ -55,6 +55,7 @@ cashiersRoutes.post(
 	celebrate({
 		[Segments.BODY]: {
 			password: Joi.string().required(),
+			observation: Joi.string().required(),
 		},
 	}),
 	closeCashierController.create,

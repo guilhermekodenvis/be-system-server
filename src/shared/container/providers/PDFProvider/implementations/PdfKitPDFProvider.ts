@@ -30,8 +30,6 @@ export default class PdfKitPDFProvider implements IPDFProvider {
 			columns: 1,
 		})
 
-		// this.document.text(text)
-
 		this.document.end()
 
 		return fileName
