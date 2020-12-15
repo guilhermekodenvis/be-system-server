@@ -8,11 +8,7 @@ import IGeneratePDFDTO from '../dtos/IGeneratePDFDTO'
 export default class PdfKitPDFProvider implements IPDFProvider {
 	private document: PDFKit.PDFDocument
 
-	private uploadPath: string
-
-	constructor() {
-		this.uploadPath = uploadConfig.pdfsFolder
-	}
+	constructor(private uploadPath = uploadConfig.pdfsFolder) {}
 
 	public async generatePDF({ text }: IGeneratePDFDTO): Promise<string> {
 		this.document = new PDFDocument({
