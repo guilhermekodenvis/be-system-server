@@ -1,13 +1,20 @@
 import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider'
 import IUsersRepository from '@modules/users/repositories/IUsersRepository'
+import IPDFProvider from '@shared/container/providers/PDFProvider/models/IPDFProvider'
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider'
 import AppError from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
+import uploadConfig from '@config/upload'
 import { v4 } from 'uuid'
 import ICloseCashierDTO from '../dtos/ICloseCashierDTO'
 import { CLOSE_CASHIER_MOVIMENT } from '../enums/cashierMovimentActions'
 import Cashier from '../infra/typeorm/schemas/Cashier'
 import ICashiersRepository from '../repositories/ICashiersRepository'
 
+interface ISendCashierOpenDTO {
+	cashier: Cashier
+	invoice: string
+}
 @injectable()
 export default class CloseCashierService {
 	constructor(
@@ -19,9 +26,18 @@ export default class CloseCashierService {
 
 		@inject('UsersRepository')
 		private usersRepository: IUsersRepository,
+
+		@inject('PDFProvider')
+		private pdfProvider: IPDFProvider,
+
+		@inject('StorageProvider')
+		private storageProvider: IStorageProvider,
 	) {}
 
-	public async run({ user_id, password }: ICloseCashierDTO): Promise<Cashier> {
+	public async run({
+		user_id,
+		password,
+	}: ICloseCashierDTO): Promise<ISendCashierOpenDTO> {
 		const user = await this.usersRepository.findById(user_id)
 		if (!user) {
 			throw new AppError('Usuário não encontrado')
@@ -54,6 +70,18 @@ export default class CloseCashierService {
 		})
 		await this.cashiersRepository.update(cashier)
 
-		return cashier
+		const openCashierText =
+			'xxxxxxxxxxxxxxxxxxxxxxxxxx\n\nFechamento do caixa\n\n'
+
+		const fileName = await this.pdfProvider.generatePDF({
+			text: openCashierText,
+		})
+
+		const finalPath = await this.storageProvider.saveFile(`pdfs/${fileName}`)
+
+		return {
+			cashier,
+			invoice: `https://${uploadConfig.config.aws.bucket}.s3.amazonaws.com/${finalPath}`,
+		}
 	}
 }

@@ -1,8 +1,11 @@
 import IHashProvider from '@modules/users/providers/HashProvider/models/IHashProvider'
 import IUsersRepository from '@modules/users/repositories/IUsersRepository'
+import IPDFProvider from '@shared/container/providers/PDFProvider/models/IPDFProvider'
+import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider'
 import AppError from '@shared/errors/AppError'
 import { inject, injectable } from 'tsyringe'
 import { v4 } from 'uuid'
+import uploadConfig from '@config/upload'
 import IOpenCashierDTO from '../dtos/IOpenCashierDTO'
 import {
 	BLEED_MOVIMENT,
@@ -10,9 +13,14 @@ import {
 	PAYBACK_MOVIMENT,
 	PAY_WITH_MONEY_MOVIMENT,
 } from '../enums/cashierMovimentActions'
+import convertNumberToBRLCurrency from '../enums/convertNumberToBRLCurrency'
 import Cashier from '../infra/typeorm/schemas/Cashier'
 import ICashiersRepository from '../repositories/ICashiersRepository'
 
+interface ISendCashierOpenDTO {
+	cashier: Cashier
+	invoice: string
+}
 @injectable()
 export default class RegisterBleedMovimentService {
 	constructor(
@@ -24,13 +32,19 @@ export default class RegisterBleedMovimentService {
 
 		@inject('UsersRepository')
 		private usersRepository: IUsersRepository,
+
+		@inject('PDFProvider')
+		private pdfProvider: IPDFProvider,
+
+		@inject('StorageProvider')
+		private storageProvider: IStorageProvider,
 	) {}
 
 	public async run({
 		user_id,
 		value,
 		password,
-	}: IOpenCashierDTO): Promise<Cashier> {
+	}: IOpenCashierDTO): Promise<ISendCashierOpenDTO> {
 		const user = await this.usersRepository.findById(user_id)
 
 		if (!user) {
@@ -84,6 +98,19 @@ export default class RegisterBleedMovimentService {
 
 		await this.cashiersRepository.update(cashier)
 
-		return cashier
+		const openCashierText = `xxxxxxxxxxxxxxxxxxxxxxxxxx\n\nSangria\n\nValor retirado: ${convertNumberToBRLCurrency(
+			value,
+		)}`
+
+		const fileName = await this.pdfProvider.generatePDF({
+			text: openCashierText,
+		})
+
+		const finalPath = await this.storageProvider.saveFile(`pdfs/${fileName}`)
+
+		return {
+			cashier,
+			invoice: `https://${uploadConfig.config.aws.bucket}.s3.amazonaws.com/${finalPath}`,
+		}
 	}
 }

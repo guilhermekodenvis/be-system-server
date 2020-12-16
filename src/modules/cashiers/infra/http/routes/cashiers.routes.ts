@@ -65,4 +65,6 @@ cashiersRoutes.get('/situation', cashiersController.show)
 
 cashiersRoutes.get('/', cashiersController.index)
 
+cashiersRoutes.post('/finish', cashiersController.finish)
+
 export default cashiersRoutes
